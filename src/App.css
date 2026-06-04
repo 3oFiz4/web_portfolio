@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+/* ^^^ Download this, to avoid regulation of font usage */
+/* ── FONTS ────────────────────────────────────── */
+.jb-mono {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+/* ── LAYOUT ───────────────────────────────────── */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-container {
+  aspect-ratio: 4 / 5;
+}
+
+.outer.card-container {
+  width: 90vw;
+  max-width: 40rem;
+}
+
+.inner.card-container {
+  width: calc(100% - 4rem);
+}
+
+/* ── MAIN GRID ────────────────────────────────── */
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(11, 1fr);
+  width: 100%;
+  height: 100%;
+}
+
+.main-grid > div {
+  border: 1px solid #444; /* debug borders */
+}
+
+.header {
+  grid-column: 1 / 7;
+  grid-row: 1 / 2;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  grid-column: 1 / 7;
+  grid-row: 2 / 8;
+  width: 100%;
+  height: 100%;
+}
+
+.footer {
+  grid-column: 1 / 7;
+  grid-row: 8 / 12;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── CONTENT GRID ─────────────────────────────── */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  width: 100%;
+  height: 100%;
+}
+
+.profile {
+  grid-column: 1 / 4;
+  grid-row: 1 / 5;
+  width: 100%;
+  height: 100%;
+}
+
+.biography {
+  grid-column: 4 / 7;
+  grid-row: 1 / 6;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.bio-header {
+  grid-column: 1;
+  grid-row: 1 / 2;
+  height: 100%;
+}
+
+.bio-content {
+  grid-column: 1;
+  grid-row: 2 / 7;
+}
+
+/* ── NAV ──────────────────────────────────────── */
+.nav-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.outer.nav-container {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.inner.nav-container {
+  text-align: center;
+}
+
+/* ── NAV ITEM HOVER ANIMATION ─────────────────── */
+.nav-item {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Bottom layer – white text visible by default */
+.text-bottom {
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+/* Top layer – animated mask rectangle */
+.mask-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%; /* starts collapsed */
+  background-color: white;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Text inside the mask – rendered in black */
+.text-top {
+  color: black;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
