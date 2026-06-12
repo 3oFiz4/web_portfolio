@@ -1,5 +1,55 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 /* ^^^ Download this, to avoid regulation of font usage */
+
+/* ── MOBILE RESPONSIVE RESET ──────────────────── */
+@media (max-width: 800px) {
+  /* 1. Reset forced aspect ratio container constraints for mobile scrolling */
+  .outer.card-container,
+  .inner.card-container,
+  .card-container {
+    width: 95vw;
+    max-width: none;
+    height: auto;
+    aspect-ratio: auto;
+  }
+
+  /* 2. Target all your defined grids */
+  .main-grid,
+  .content-grid,
+  .biography,
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+    height: auto !important;
+    gap: 1rem; /* Adds clean spacing between stacked elements */
+  }
+
+  /* 3. Strip explicit coordinate placements so items auto-flow downwards */
+  .header,
+  .content,
+  .footer,
+  .profile,
+  .biography,
+  .tech_stack,
+  .bio-header,
+  .bio-content,
+  .title-top,
+  .counter,
+  .terminal,
+  .title-bottom,
+  .quote {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    height: auto !important;
+  }
+
+  /* 4. Fix navigation containers if they squash horizontally */
+  .nav-container {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+  }
+}
 /* ── FONTS ────────────────────────────────────── */
 .jb-mono {
   font-family: "JetBrains Mono", monospace;
@@ -36,9 +86,10 @@
   height: 100%;
 }
 
-.main-grid > div {
-  border: 1px solid #444; /* debug borders */
-}
+/* .main-grid > div { */
+/*   border: 1px solid #444; /* debug borders */
+*/
+/* } */
 
 .header {
   grid-column: 1 / 7;
