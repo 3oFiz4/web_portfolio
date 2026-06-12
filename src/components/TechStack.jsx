@@ -242,7 +242,7 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
               key={idx}
               onClick={() => setCurrentChunkIndex(idx)}
               className={`h-[0.2rem] transition-all cursor-pointer ${
-                currentChunkIndex === idx ? "w-8 bg-white" : "w-2 bg-white/15"
+                currentChunkIndex === idx ? "w-8 bg-white/20" : "w-2 bg-white/5"
               }`}
               aria-label={`Show chunk ${idx + 1}`}
             />

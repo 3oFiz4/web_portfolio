@@ -19,3 +19,32 @@
 
 # 2026-06-09 12:05:29.686735
 +Somehow it made the SVG to be invisible. Fix it.
+
+# 2026-06-12 18:22:32.740032
++Revamp this code.. So that the background went full-width, but the text is centered. ```  return (
++    <h1
++      ref={containerRef}
++      className={`relative overflow-hidden inline-flex items-center justify-center py-3.5 md:py-4 font-extrabold text-3xl md:text-5xl tracking-tight select-none ${finalBgClassName} ${finalTextClassName}${className}`}
++      {...props}
++    >
++      {/* Moving StripeSvg background track */}
++      <div
++        ref={stripeTrackRef}
++        className={`absolute inset-y-0 left-0 flex flex-row items-center pointer-events-none z-0 will-change-transform ${finalStripeClassName}`}
++      >
++        {Array.from({ length: COPIES }).map((_, i) => (
++          <StripeSvg key={i} opacity={finalStripeOpacity} />
++        ))}
++      </div>
++
++      {/* Subtle glossy overlay for premium depth */}
++      <div className="absolute inset-0 pointer-events-none z-1" />
++
++      {/* Title Text Content */}
++      <span className="relative z-10">{children}</span>
++    </h1>
++  );
++```
+
+# 2026-06-12 20:32:41.872532
++N
