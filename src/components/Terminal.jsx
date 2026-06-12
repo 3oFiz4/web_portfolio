@@ -6,9 +6,20 @@ function Terminal({ className = "" }) {
     <div
       className={`relative border border-white overflow-hidden w-full h-full ${className}`}
     >
-      <code className="jb-mono px-4 text-xs font-light leading-none select-none text-white">
-        Is this running? Clearly yeah.
-      </code>
+      <pre className="jb-mono px-4 h-full text-[10px] font-light text-white overflow-y-scroll">
+        v0.0.1
+        <br />
+        This website is still early, please wait for another feature! ty!
+        <br />
+        Coming soon:
+        <br />
+        [ ] Projects
+        <br />
+        [ ] About <br />
+        [ ] ??? <br />
+        [ ] Mobile-support
+        <br />
+      </pre>
     </div>
   );
 }

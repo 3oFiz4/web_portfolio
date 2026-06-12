@@ -42,9 +42,9 @@ function App() {
       <Card ref={cardRef}>
         <div className="main-grid">
           {/* HEADER */}
-          <div className="header">
-            <NavBar items={NAV_LINKS} />
-          </div>
+          {/* <div className="header"> */}
+          {/*   <NavBar items={NAV_LINKS} /> */}
+          {/* </div> */}
 
           {/* CONTENT */}
           <div className="content content-grid">
@@ -85,8 +85,8 @@ function App() {
             </div>
             <div className="quote">
               <Quote
-                text="With our thoughts, we make the world."
-                origin="Siddharta Gautama"
+                text="The only true wisdom is in knowing you know nothing"
+                origin="Socrates"
               />
             </div>
           </div>

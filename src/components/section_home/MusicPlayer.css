@@ -1,0 +1,153 @@
+.music-player {
+  /* Resizable by width and height */
+  resize: both;
+  overflow: hidden;
+  min-width: 400px;
+  min-height: 140px;
+  width: 900px;
+  height: 180px;
+  max-width: 100vw;
+  max-height: 100vh;
+
+  background-color: #000;
+  border: 2px solid #fff;
+  padding: 12px;
+  box-sizing: border-box;
+  font-family: "Courier New", Courier, monospace;
+  color: #fff;
+  position: relative;
+}
+
+.player-inner {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.logo-container {
+  flex-shrink: 0;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-placeholder {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 72px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #2a2a1a 0%, #1a2a1a 100%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+.music-name {
+  font-size: 24px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 1px;
+}
+
+.slider-container {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.slider-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.slider-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #fff;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+}
+
+.slider-thumb:active {
+  cursor: grabbing;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.ctrl-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 16px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 40px;
+}
+
+.ctrl-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.ctrl-btn:active {
+  transform: scale(0.95);
+}
+
+.time-display {
+  margin-left: 12px;
+  font-size: 14px;
+  color: #aaa;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Resize handle styling */
+.music-player::-webkit-resizer {
+  background: transparent;
+}
