@@ -10,7 +10,7 @@ function Biography() {
     <>
       <div className="bio-header w-full">
         <div className="name w-full h-full pl-3 pt-1 min-w-0">
-          <Name name="Yor" age="18" />
+          <Name name="Jordan&nbsp;(Yor)" age="18" />
           <Role list={list} />
         </div>
       </div>

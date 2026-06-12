@@ -50,10 +50,7 @@ function App() {
           <div className="content content-grid">
             <div className="profile">
               <div className="profile">
-                <ProfileImage
-                  src="https://i.pinimg.com/1200x/1d/b7/ba/1db7ba7225c3adbfe389b027fd8b7e7d.jpg"
-                  alt="Profile"
-                />
+                <ProfileImage src="../src/assets/pfp.jpg" alt="Profile" />
                 <Contact />
               </div>
             </div>

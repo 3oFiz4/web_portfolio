@@ -6,10 +6,12 @@ function Terminal({ className = "" }) {
     <div
       className={`relative border border-white overflow-hidden w-full h-full ${className}`}
     >
-      <pre className="jb-mono px-4 h-full text-[10px] font-light text-white overflow-y-scroll">
+      <pre className="jb-mono px-4 h-full text-[10px] font-light text-white">
         v0.0.1
         <br />
-        This website is still early, please wait for another feature! ty!
+        This website is still early,
+        <br /> please wait for another
+        <br /> feature! ty!
         <br />
         Coming soon:
         <br />

@@ -81,7 +81,7 @@ function ProfileImage({ src, alt = "" }) {
             duration: 0.4,
             ease: "power1.out",
           },
-          0
+          0,
         )
 
         // coast
@@ -111,7 +111,7 @@ function ProfileImage({ src, alt = "" }) {
             duration: 0.4,
             ease: "sine.out",
           },
-          "-=1.8"
+          "-=1.8",
         );
     };
 

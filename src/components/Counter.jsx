@@ -61,7 +61,7 @@ function Counter({ children, className = "" }) {
         <>
           <CounterBox
             Title="Exp."
-            Value="4"
+            Value="6"
             is_certain={false}
             add_value="years"
             delay={0}
