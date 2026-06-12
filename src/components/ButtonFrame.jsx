@@ -73,13 +73,10 @@ function ButtonFrame({ children, className = "", ...props }) {
       className={`relative inline-flex items-center justify-center cursor-pointer bg-transparent border-none outline-none ${className}`}
       {...props}
     >
-      <div
-        ref={bgRef}
-        className="absolute inset-0 bg-white/20 rounded-sm pointer-events-none"
-      />
+      <div ref={bgRef} className="absolute inset-0 bg-white/20 rounded-sm " />
 
       <svg
-        className="absolute top-0 left-0 w-4 h-4 pointer-events-none"
+        className="absolute top-0 left-0 w-4 h-4 "
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
       >
@@ -94,7 +91,7 @@ function ButtonFrame({ children, className = "", ...props }) {
       </svg>
 
       <svg
-        className="absolute top-0 right-0 w-4 h-4 pointer-events-none"
+        className="absolute top-0 right-0 w-4 h-4"
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
       >
@@ -109,7 +106,7 @@ function ButtonFrame({ children, className = "", ...props }) {
       </svg>
 
       <svg
-        className="absolute bottom-0 left-0 w-4 h-4 pointer-events-none"
+        className="absolute bottom-0 left-0 w-4 h-4 "
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
       >
@@ -124,7 +121,7 @@ function ButtonFrame({ children, className = "", ...props }) {
       </svg>
 
       <svg
-        className="absolute bottom-0 right-0 w-4 h-4 pointer-events-none"
+        className="absolute bottom-0 right-0 w-4 h-4"
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
       >
@@ -138,7 +135,7 @@ function ButtonFrame({ children, className = "", ...props }) {
         />
       </svg>
 
-      <span className="relative z-10 pointer-events-none">{children}</span>
+      <span className="relative z-10">{children}</span>
     </button>
   );
 }
