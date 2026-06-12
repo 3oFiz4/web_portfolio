@@ -52,26 +52,48 @@ export function Icon({
   );
 }
 
+// const DEFAULT_ICONS = [
+//   { name: "", icon: FaHtml5, color: "text-orange-500" },
+//   { name: "", icon: FaCss3Alt, color: "text-blue-300" },
+//   { name: "", icon: FaJs, color: "text-yellow-300" },
+//   { name: "", icon: FaReact, color: "text-cyan-300" },
+//   { name: "", icon: SiSvelte, color: "text-orange-500" },
+//   { name: "", icon: RiTailwindCssFill, color: "text-sky-300" },
+//   { name: "", icon: FaNpm, color: "text-red-300" },
+//   { name: "", icon: FaNodeJs, color: "text-emerald-300" },
+//   { name: "", icon: SiExpress, color: "text-emerald-300" },
+//   { name: "", icon: FaPython, color: "text-blue-300" },
+//   { name: "", icon: SiScikitlearn, color: "text-amber-200" },
+//   { name: "", icon: SiPytorch, color: "text-orange-600" },
+//   { name: "", icon: SiTensorflow, color: "text-orange-400" },
+//   { name: "", icon: FaGitAlt, color: "text-red-300" },
+//   { name: "", icon: SiSelenium, color: "text-gray-400" },
+//   { name: "", icon: FaFigma, color: "text-orange-500" },
+//   { name: "", icon: TbBrandAdobeIllustrator, color: "text-orange-400" },
+//   { name: "", icon: FaRust, color: "text-orange-800" },
+//   { name: "", icon: SiActix, color: "text-orange-300" },
+// ];
+//
 const DEFAULT_ICONS = [
-  { name: "", icon: FaHtml5, color: "text-orange-500" },
-  { name: "", icon: FaCss3Alt, color: "text-blue-300" },
-  { name: "", icon: FaJs, color: "text-yellow-300" },
-  { name: "", icon: FaReact, color: "text-cyan-300" },
-  { name: "", icon: SiSvelte, color: "text-orange-500" },
-  { name: "", icon: RiTailwindCssFill, color: "text-sky-300" },
-  { name: "", icon: FaNpm, color: "text-red-300" },
-  { name: "", icon: FaNodeJs, color: "text-emerald-300" },
-  { name: "", icon: SiExpress, color: "text-emerald-300" },
-  { name: "", icon: FaPython, color: "text-blue-300" },
-  { name: "", icon: SiScikitlearn, color: "text-amber-200" },
-  { name: "", icon: SiPytorch, color: "text-orange-600" },
-  { name: "", icon: SiTensorflow, color: "text-orange-400" },
-  { name: "", icon: FaGitAlt, color: "text-red-300" },
-  { name: "", icon: SiSelenium, color: "text-gray-400" },
-  { name: "", icon: FaFigma, color: "text-orange-500" },
-  { name: "", icon: TbBrandAdobeIllustrator, color: "text-orange-400" },
-  { name: "", icon: FaRust, color: "text-orange-800" },
-  { name: "", icon: SiActix, color: "text-orange-300" },
+  { name: "", icon: FaHtml5, color: "text-white/50" },
+  { name: "", icon: FaCss3Alt, color: "text-white/50" },
+  { name: "", icon: FaJs, color: "text-white/50" },
+  { name: "", icon: FaReact, color: "text-white/50" },
+  { name: "", icon: SiSvelte, color: "text-white/50" },
+  { name: "", icon: RiTailwindCssFill, color: "text-white/50" },
+  { name: "", icon: FaNpm, color: "text-white/50" },
+  { name: "", icon: FaNodeJs, color: "text-white/50" },
+  { name: "", icon: SiExpress, color: "text-white/50" },
+  { name: "", icon: FaPython, color: "text-white/50" },
+  { name: "", icon: SiScikitlearn, color: "text-white/50" },
+  { name: "", icon: SiPytorch, color: "text-white/50" },
+  { name: "", icon: SiTensorflow, color: "text-white/50" },
+  { name: "", icon: FaGitAlt, color: "text-white/50" },
+  { name: "", icon: SiSelenium, color: "text-white/50" },
+  { name: "", icon: FaFigma, color: "text-white/50" },
+  { name: "", icon: TbBrandAdobeIllustrator, color: "text-white/50" },
+  { name: "", icon: FaRust, color: "text-white/50" },
+  { name: "", icon: SiActix, color: "text-white/50" },
 ];
 
 function TechStack({ children, chunk_by, chunkBy, className = "" }) {
@@ -187,7 +209,7 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
         <button
           onClick={handlePrev}
           disabled={totalChunks <= 1}
-          className="shrink-0 z-10 flex items-center justify-center w-4 h-4 sm:w-11 sm:h-11 active:scale-90 transition-all text-white/20 active:text-white cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed"
+          className="shrink-0 z-10 flex items-center justify-center w-4 h-4 sm:w-11 sm:h-11 active:scale-90 transition-all text-white/5 active:text-white cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed"
           aria-label="Previous tech stack chunk"
         >
           <FaChevronLeft className="w-3 h-3 sm:w-5 sm:h-5" />
@@ -227,7 +249,7 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
         <button
           onClick={handleNext}
           disabled={totalChunks <= 1}
-          className="shrink-0 z-10 flex items-center justify-center w-4 h-4 sm:w-11 sm:h-11 active:scale-90 transition-all text-white/20 active:text-white cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed"
+          className="shrink-0 z-10 flex items-center justify-center w-4 h-4 sm:w-11 sm:h-11 active:scale-90 transition-all text-white/5 active:text-white cursor-pointer disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed"
           aria-label="Next tech stack chunk"
         >
           <FaChevronRight className="w-3 h-3 sm:w-5 sm:h-5" />
@@ -242,7 +264,7 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
               key={idx}
               onClick={() => setCurrentChunkIndex(idx)}
               className={`h-[0.2rem] transition-all cursor-pointer ${
-                currentChunkIndex === idx ? "w-8 bg-white/20" : "w-2 bg-white/5"
+                currentChunkIndex === idx ? "w-8 bg-white/10" : "w-2 bg-white/5"
               }`}
               aria-label={`Show chunk ${idx + 1}`}
             />

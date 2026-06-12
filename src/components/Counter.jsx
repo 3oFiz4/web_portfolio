@@ -4,31 +4,46 @@ import { gsap } from "gsap";
 import CounterBox from "./CounterBox";
 
 async function getGithubRepos(username) {
-  const res = await fetch(`https://api.github.com/users/${username}`);
-  const user = await res.json();
+  try {
+    const res = await fetch(`https://api.github.com/users/${username}`);
 
-  return user.public_repos;
+    if (!res.ok) throw new Error("GitHub API failed");
+
+    const user = await res.json();
+
+    return user.public_repos;
+  } catch (err) {
+    console.warn("Failed to fetch repos:", err);
+    return 12; // fallback
+  }
 }
 
 async function getTotalStars(username) {
-  let page = 1;
-  let totalStars = 0;
+  try {
+    let page = 1;
+    let totalStars = 0;
 
-  while (true) {
-    const res = await fetch(
-      `https://api.github.com/users/${username}/repos?per_page=100&page=${page}`,
-    );
+    while (true) {
+      const res = await fetch(
+        `https://api.github.com/users/${username}/repos?per_page=100&page=${page}`,
+      );
 
-    const repos = await res.json();
+      if (!res.ok) throw new Error("GitHub API failed");
 
-    if (repos.length === 0) break;
+      const repos = await res.json();
 
-    totalStars += repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+      if (repos.length === 0) break;
 
-    page++;
+      totalStars += repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+
+      page++;
+    }
+
+    return totalStars;
+  } catch (err) {
+    console.warn("Failed to fetch stars:", err);
+    return 25; // fallback
   }
-
-  return totalStars;
 }
 
 const name = "3oFiz4";

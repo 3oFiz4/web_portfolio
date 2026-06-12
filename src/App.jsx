@@ -9,8 +9,10 @@ import Biography from "./components/Biography";
 import Contact from "./components/Contact";
 import TechStack from "./components/TechStack";
 import Title from "./components/Title";
-// import Terminal from "./components/Terminal";
+import Terminal from "./components/Terminal";
 import Counter from "./components/Counter";
+// dont add music, its a bit ugly.
+import Quote from "./components/Quote";
 
 const NAV_LINKS = [
   { label: "project", href: "#project" },
@@ -59,7 +61,7 @@ function App() {
               <Biography />
             </div>
             <div className="tech_stack">
-              <TechStack className="border-t border-white/5" />
+              <TechStack className="" />
             </div>
           </div>
 
@@ -70,9 +72,22 @@ function App() {
                 More About Me
               </Title>
             </div>
-            <div className="terminal">{/* <Terminal /> */}</div>
-            <div className="counter ">
+            <div className="terminal">
+              <Terminal />
+            </div>
+            <div className="counter px-2">
               <Counter />
+            </div>
+            <div className="title-bottom py-4">
+              <Title className="w-full title-top jb-mono border-white border-r-2 border-l-2">
+                Thank you for Reading {"<3!"}
+              </Title>
+            </div>
+            <div className="quote">
+              <Quote
+                text="With our thoughts, we make the world."
+                origin="Siddharta Gautama"
+              />
             </div>
           </div>
         </div>
