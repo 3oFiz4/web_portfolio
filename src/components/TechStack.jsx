@@ -8,26 +8,30 @@ import React, {
 } from "react";
 import gsap from "gsap";
 import {
-  FaGithub,
-  FaLinkedin,
-  FaJs,
-  FaReact,
-  FaPython,
-  FaNodeJs,
   FaHtml5,
   FaCss3Alt,
+  FaJs,
+  FaReact,
+  FaNodeJs,
+  FaPython,
   FaGitAlt,
-  FaDocker,
-  FaJava,
-  FaPhp,
-  FaVuejs,
-  FaAngular,
-  FaSwift,
+  FaFigma,
+  FaRust,
   FaNpm,
-  FaAws,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
+import { RiTailwindCssFill } from "react-icons/ri"; // special kid :sob:
+import {
+  SiExpress,
+  SiScikitlearn,
+  SiTensorflow,
+  SiPytorch,
+  SiSelenium,
+  SiActix,
+  SiSvelte,
+} from "react-icons/si"; // special kid too
+import { TbBrandAdobeIllustrator } from "react-icons/tb"; // even special kid
 import { MdEmail } from "react-icons/md";
 
 // Exporting Icon helper so users can easily use <Icon>Hi</Icon> or custom icons
@@ -49,21 +53,25 @@ export function Icon({
 }
 
 const DEFAULT_ICONS = [
+  { name: "", icon: FaHtml5, color: "text-orange-500" },
+  { name: "", icon: FaCss3Alt, color: "text-blue-300" },
   { name: "", icon: FaJs, color: "text-yellow-300" },
   { name: "", icon: FaReact, color: "text-cyan-300" },
-  { name: "", icon: FaPython, color: "text-blue-300" },
-  { name: "", icon: FaNodeJs, color: "text-emerald-300" },
-  { name: "", icon: FaHtml5, color: "text-orange-300" },
-  { name: "", icon: FaCss3Alt, color: "text-blue-300" },
-  { name: "", icon: FaGitAlt, color: "text-red-300" },
-  { name: "", icon: FaDocker, color: "text-sky-300" },
-  { name: "", icon: FaJava, color: "text-amber-300" },
-  { name: "", icon: FaPhp, color: "text-indigo-200" },
-  { name: "", icon: FaVuejs, color: "text-emerald-300" },
-  { name: "", icon: FaAngular, color: "text-red-400" },
-  { name: "", icon: FaSwift, color: "text-amber-300" },
+  { name: "", icon: SiSvelte, color: "text-orange-500" },
+  { name: "", icon: RiTailwindCssFill, color: "text-sky-300" },
   { name: "", icon: FaNpm, color: "text-red-300" },
-  { name: "", icon: FaAws, color: "text-amber-400" },
+  { name: "", icon: FaNodeJs, color: "text-emerald-300" },
+  { name: "", icon: SiExpress, color: "text-emerald-300" },
+  { name: "", icon: FaPython, color: "text-blue-300" },
+  { name: "", icon: SiScikitlearn, color: "text-amber-200" },
+  { name: "", icon: SiPytorch, color: "text-orange-600" },
+  { name: "", icon: SiTensorflow, color: "text-orange-400" },
+  { name: "", icon: FaGitAlt, color: "text-red-300" },
+  { name: "", icon: SiSelenium, color: "text-gray-400" },
+  { name: "", icon: FaFigma, color: "text-orange-500" },
+  { name: "", icon: TbBrandAdobeIllustrator, color: "text-orange-400" },
+  { name: "", icon: FaRust, color: "text-orange-800" },
+  { name: "", icon: SiActix, color: "text-orange-300" },
 ];
 
 function TechStack({ children, chunk_by, chunkBy, className = "" }) {

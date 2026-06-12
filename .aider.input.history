@@ -1,0 +1,21 @@
+
+# 2026-06-05 18:19:34.250395
++Create a minimalist button with onClick event when clicked opens a new tab of a certain link
+
+# 2026-06-09 11:48:15.786307
++/add components/Contact.jsx
+
+# 2026-06-09 11:48:34.001841
++How do I encapsulate the SVG Logo, and ensuring that it can be clicked?
+
+# 2026-06-09 11:54:45.757321
++N
+
+# 2026-06-09 12:02:49.267445
++/add components/Contact.jsx
+
+# 2026-06-09 12:03:19.904087
++Modify the given file, so that whenever the SVG is clicked it will automatically lead to a link. Ensure that it is encapsulated within a button. No additional components.
+
+# 2026-06-09 12:05:29.686735
++Somehow it made the SVG to be invisible. Fix it.
