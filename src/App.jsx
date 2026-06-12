@@ -6,6 +6,8 @@ import NavBar from "./components/NavBar";
 import ContentGrid from "./components/ContentGrid";
 import ProfileImage from "./components/ProfileImage";
 import Biography from "./components/Biography";
+import Contact from "./components/Contact";
+import TechStack from "./components/TechStack";
 
 const NAV_LINKS = [
   { label: "project", href: "#project" },
@@ -42,13 +44,19 @@ function App() {
           {/* CONTENT */}
           <div className="content content-grid">
             <div className="profile">
-              <ProfileImage
-                src="https://i.pinimg.com/1200x/1d/b7/ba/1db7ba7225c3adbfe389b027fd8b7e7d.jpg"
-                alt="Profile"
-              />
+              <div className="profile">
+                <ProfileImage
+                  src="https://i.pinimg.com/1200x/1d/b7/ba/1db7ba7225c3adbfe389b027fd8b7e7d.jpg"
+                  alt="Profile"
+                />
+                <Contact />
+              </div>
             </div>
             <div className="biography">
               <Biography />
+            </div>
+            <div className="tech_stack">
+              <TechStack className="mt-1 border border-white/5" />
             </div>
           </div>
 
