@@ -1,5 +1,11 @@
 // src/components/TechStack.jsx
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
@@ -46,38 +52,56 @@ export function Icon({
 }
 
 const DEFAULT_ICONS = [
-  { name: "", icon: FaHtml5, color: "text-white/50" },
-  { name: "", icon: FaCss3Alt, color: "text-white/50" },
-  { name: "", icon: FaJs, color: "text-white/50" },
-  { name: "", icon: FaReact, color: "text-white/50" },
-  { name: "", icon: SiSvelte, color: "text-white/50" },
-  { name: "", icon: RiTailwindCssFill, color: "text-white/50" },
-  { name: "", icon: FaNpm, color: "text-white/50" },
-  { name: "", icon: FaNodeJs, color: "text-white/50" },
-  { name: "", icon: SiExpress, color: "text-white/50" },
-  { name: "", icon: FaPython, color: "text-white/50" },
-  { name: "", icon: SiScikitlearn, color: "text-white/50" },
-  { name: "", icon: SiPytorch, color: "text-white/50" },
-  { name: "", icon: SiTensorflow, color: "text-white/50" },
-  { name: "", icon: FaGitAlt, color: "text-white/50" },
-  { name: "", icon: SiSelenium, color: "text-white/50" },
-  { name: "", icon: FaFigma, color: "text-white/50" },
-  { name: "", icon: TbBrandAdobeIllustrator, color: "text-white/50" },
-  { name: "", icon: FaRust, color: "text-white/50" },
-  { name: "", icon: SiActix, color: "text-white/50" },
+  { name: "html5", icon: FaHtml5, color: "text-white/50" },
+  { name: "css3", icon: FaCss3Alt, color: "text-white/50" },
+  { name: "js", icon: FaJs, color: "text-white/50" },
+  { name: "react", icon: FaReact, color: "text-white/50" },
+  { name: "svelte", icon: SiSvelte, color: "text-white/50" },
+  { name: "tailwind", icon: RiTailwindCssFill, color: "text-white/50" },
+  { name: "npm", icon: FaNpm, color: "text-white/50" },
+  { name: "nodejs", icon: FaNodeJs, color: "text-white/50" },
+  { name: "express", icon: SiExpress, color: "text-white/50" },
+  { name: "python", icon: FaPython, color: "text-white/50" },
+  { name: "sklearn", icon: SiScikitlearn, color: "text-white/50" },
+  { name: "pytorch", icon: SiPytorch, color: "text-white/50" },
+  { name: "tensorflow", icon: SiTensorflow, color: "text-white/50" },
+  { name: "git", icon: FaGitAlt, color: "text-white/50" },
+  { name: "selenium", icon: SiSelenium, color: "text-white/50" },
+  { name: "figma", icon: FaFigma, color: "text-white/50" },
+  {
+    name: "illustrator",
+    icon: TbBrandAdobeIllustrator,
+    color: "text-white/50",
+  },
+  { name: "rust", icon: FaRust, color: "text-white/50" },
+  { name: "actix", icon: SiActix, color: "text-white/50" },
 ];
 
 function TechStack({ children, chunk_by, chunkBy, className = "" }) {
-  // Parse chunk size supporting both prop naming styles
   const rawChunkSize = chunk_by !== undefined ? chunk_by : chunkBy;
   const chunkSize = parseInt(rawChunkSize, 10) || 5;
 
-  // Determine items
+  const containerRef = useRef(null);
+  const trackRef = useRef(null);
+  // Store chunk DOM refs in a stable ref-map keyed by index
+  const chunkRefsMap = useRef({});
+  // Ref to hold the active GSAP pop-in tween so we can kill it before re-running
+  const popTweenRef = useRef(null);
+  // Ref to hold the auto-advance interval id
+  const intervalRef = useRef(null);
+
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
+
+  // Stable ref for currentChunkIndex so interval callback never stales
+  const currentChunkIndexRef = useRef(currentChunkIndex);
+  useEffect(() => {
+    currentChunkIndexRef.current = currentChunkIndex;
+  }, [currentChunkIndex]);
+
   const items = useMemo(() => {
     const childrenArray = React.Children.toArray(children);
-    if (childrenArray.length > 0) {
-      return childrenArray;
-    }
+    if (childrenArray.length > 0) return childrenArray;
+
     return DEFAULT_ICONS.map((item) => (
       <Icon
         key={item.name}
@@ -88,7 +112,6 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
     ));
   }, [children]);
 
-  // Group items into chunks
   const chunks = useMemo(() => {
     const result = [];
     for (let i = 0; i < items.length; i += chunkSize) {
@@ -99,90 +122,98 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
 
   const totalChunks = chunks.length;
 
-  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
-  const containerRef = useRef(null);
-  const trackRef = useRef(null);
-  const chunkRefs = useRef([]);
-  chunkRefs.current = [];
+  // Stable ref for totalChunks so interval callback never stales
+  const totalChunksRef = useRef(totalChunks);
+  useEffect(() => {
+    totalChunksRef.current = totalChunks;
+  }, [totalChunks]);
 
-  const addToChunkRefs = useCallback((el) => {
-    if (el && !chunkRefs.current.includes(el)) {
-      chunkRefs.current.push(el);
-    }
-  }, []);
-
-  // Ensure index is valid
-  useMemo(() => {
-    if (totalChunks > 0 && currentChunkIndex >= totalChunks) {
+  // Clamp index when chunks shrink
+  useEffect(() => {
+    if (currentChunkIndex >= totalChunks && totalChunks > 0) {
       setCurrentChunkIndex(0);
     }
   }, [totalChunks, currentChunkIndex]);
 
-  // GSAP animations with useGSAP for better performance and cleanup
-  useGSAP(
+  // Stable chunk ref callback - avoids rebuilding on every render
+  const setChunkRef = useCallback((el, idx) => {
+    if (el) {
+      chunkRefsMap.current[idx] = el;
+    } else {
+      delete chunkRefsMap.current[idx];
+    }
+  }, []);
+
+  // GSAP slide + pop-in - runs whenever currentChunkIndex changes
+  const { contextSafe } = useGSAP(
     () => {
       if (!trackRef.current || totalChunks === 0) return;
 
-      const ctx = gsap.context(() => {
-        // Animate track
-        gsap.to(trackRef.current, {
-          xPercent: -100 * currentChunkIndex,
-          duration: 0.6,
-          ease: "power3.inOut",
-          overwrite: "auto",
-        });
+      // Kill any in-progress pop-in to prevent overlapping tweens
+      if (popTweenRef.current) {
+        popTweenRef.current.kill();
+        popTweenRef.current = null;
+      }
 
-        // Animate current chunk children
-        const currentChunkEl = chunkRefs.current[currentChunkIndex];
-        if (currentChunkEl) {
-          const childrenElements = currentChunkEl.children;
-          if (childrenElements && childrenElements.length > 0) {
-            gsap.fromTo(
-              childrenElements,
-              { scale: 0.85, opacity: 0.6 },
-              {
-                scale: 1,
-                opacity: 1,
-                duration: 0.4,
-                ease: "back.out(1.5)",
-                stagger: 0.05,
-                overwrite: "auto",
-              },
-            );
-          }
-        }
-      }, containerRef);
+      // Slide the track
+      gsap.to(trackRef.current, {
+        xPercent: -100 * currentChunkIndex,
+        duration: 0.6,
+        ease: "power3.inOut",
+        overwrite: "auto",
+      });
 
-      return () => ctx.revert();
+      // Pop-in children of the active chunk
+      const activeChunk = chunkRefsMap.current[currentChunkIndex];
+      if (activeChunk?.children?.length) {
+        popTweenRef.current = gsap.fromTo(
+          Array.from(activeChunk.children),
+          { scale: 0.85, opacity: 0.6 },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 0.4,
+            ease: "back.out(1.5)",
+            stagger: 0.05,
+            overwrite: "auto",
+            onComplete: () => {
+              popTweenRef.current = null;
+            },
+          },
+        );
+      }
     },
+    // Scope to container, re-run when index or chunk count changes
     { scope: containerRef, dependencies: [currentChunkIndex, totalChunks] },
   );
 
-  // Navigation handlers
-  const handleNext = useCallback(() => {
-    if (totalChunks <= 1) return;
-    setCurrentChunkIndex((prev) => (prev + 1) % totalChunks);
-  }, [totalChunks]);
-
-  const handlePrev = useCallback(() => {
-    if (totalChunks <= 1) return;
-    setCurrentChunkIndex((prev) => (prev - 1 + totalChunks) % totalChunks);
-  }, [totalChunks]);
-
-  // Auto-advance with proper cleanup
-  useGSAP(
-    () => {
-      if (totalChunks <= 1) return;
-      const interval = setInterval(() => {
-        handleNext();
-      }, 5000);
-      return () => clearInterval(interval);
-    },
-    {
-      scope: containerRef,
-      dependencies: [totalChunks, currentChunkIndex, handleNext],
-    },
+  const handleNext = contextSafe(
+    useCallback(() => {
+      if (totalChunksRef.current <= 1) return;
+      setCurrentChunkIndex((prev) => (prev + 1) % totalChunksRef.current);
+    }, []),
   );
+
+  const handlePrev = contextSafe(
+    useCallback(() => {
+      if (totalChunksRef.current <= 1) return;
+      setCurrentChunkIndex(
+        (prev) => (prev - 1 + totalChunksRef.current) % totalChunksRef.current,
+      );
+    }, []),
+  );
+
+  // Auto-advance - stable interval that never re-registers on index change
+  useEffect(() => {
+    if (totalChunks <= 1) return;
+
+    intervalRef.current = setInterval(() => {
+      setCurrentChunkIndex((prev) => (prev + 1) % totalChunksRef.current);
+    }, 5000);
+
+    return () => clearInterval(intervalRef.current);
+    // Only re-register if totalChunks itself changes, not on every index tick
+  }, [totalChunks]);
 
   return (
     <div
@@ -210,7 +241,7 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
             {chunks.map((chunk, chunkIdx) => (
               <div
                 key={chunkIdx}
-                ref={addToChunkRefs}
+                ref={(el) => setChunkRef(el, chunkIdx)}
                 className="w-full shrink-0 flex flex-row flex-wrap items-center justify-center gap-1 md:gap-4"
               >
                 {chunk.map((item, itemIdx) => (
