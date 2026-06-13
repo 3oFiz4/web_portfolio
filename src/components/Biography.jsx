@@ -14,7 +14,7 @@ function Biography() {
           <Role list={list} />
         </div>
       </div>
-      <div className="bio-content w-full h-full flex-1">
+      <div className="bio-content w-full h-full min-w-0">
         <Intro />
       </div>
     </>

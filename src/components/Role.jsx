@@ -64,7 +64,7 @@ function Role({ list = [] }) {
         targetSpeedRef.current = gsap.utils.clamp(
           -MAX_DRAG_SPEED,
           MAX_DRAG_SPEED,
-          dragDistanceRef.current * DRAG_MULTIPLIER
+          dragDistanceRef.current * DRAG_MULTIPLIER,
         );
       } else if (isHoveringRef.current) {
         targetSpeedRef.current = 0;
@@ -75,7 +75,7 @@ function Role({ list = [] }) {
       currentSpeedRef.current = gsap.utils.interpolate(
         currentSpeedRef.current,
         targetSpeedRef.current,
-        isDraggingRef.current ? 0.18 : SMOOTHNESS
+        isDraggingRef.current ? 0.18 : SMOOTHNESS,
       );
 
       xRef.current += currentSpeedRef.current * (deltaTime / 1000);
@@ -116,18 +116,12 @@ function Role({ list = [] }) {
   if (!list.length) return null;
 
   return (
-    <div
-      ref={wrapperRef}
-      className="relative"
-      style={{
-        overflow: "hidden",
-      }}
-    >
+    <div ref={wrapperRef} className="relative w-full overflow-hidden">
       {/* Left fade overlay */}
       <div
         className="pointer-events-none absolute left-0 top-0 z-10 h-full"
         style={{
-          width: "24px",
+          width: "clamp(1rem, 3vw, 2rem)",
           background:
             "linear-gradient(to right, var(--fade-bg, #000) 0%, transparent 100%)",
         }}
@@ -137,7 +131,7 @@ function Role({ list = [] }) {
       <div
         className="pointer-events-none absolute right-0 top-0 z-10 h-full"
         style={{
-          width: "24px",
+          width: "clamp(1rem, 3vw, 5rem)",
           background:
             "linear-gradient(to left, var(--fade-bg, #000) 0%, transparent 100%)",
         }}
@@ -145,7 +139,7 @@ function Role({ list = [] }) {
 
       <div
         ref={viewportRef}
-        className="relative select-none cursor-grab overflow-hidden active:cursor-grabbing"
+        className="relative w-full select-none cursor-grab overflow-hidden active:cursor-grabbing"
         onMouseEnter={() => (isHoveringRef.current = true)}
         onMouseLeave={() => (isHoveringRef.current = false)}
         onPointerDown={handlePointerDown}
@@ -170,7 +164,7 @@ function Role({ list = [] }) {
                 <span
                   key={`${copyIndex}-${roleIndex}`}
                   className="text-white w-full jb-mono text-center
-                  text-xs md:text-sm lg:text-sm"
+                  text-[clamp(0.65rem,2.5vw,0.875rem)]"
                 >
                   {role}
                 </span>
