@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
-/* ^^^ Download this, to avoid regulation of font usage */
 html,
 body {
   width: 100%;
@@ -70,8 +68,16 @@ body {
   }
 }
 /* ── FONTS ────────────────────────────────────── */
+@font-face {
+  font-family: "JetBrains";
+  src: url("../fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .jb-mono {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains", monospace;
   font-optical-sizing: auto;
   font-style: normal;
 }
