@@ -24,7 +24,7 @@ h-52 max-h-52 md:h-full md:max-h-full
         px-3 py-1 w-full h-full"
       style={{
         scrollbarWidth: "thin",
-        scrollbarColor: "rgba(255,255,255,0.2) transparent",
+        scrollbarColor: "rgba(255,255,255,0.1) transparent",
       }}
     >
       <p>
