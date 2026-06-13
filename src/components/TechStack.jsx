@@ -1,12 +1,7 @@
 // src/components/TechStack.jsx
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -21,7 +16,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { RiTailwindCssFill } from "react-icons/ri"; // special kid :sob:
+import { RiTailwindCssFill } from "react-icons/ri";
 import {
   SiExpress,
   SiScikitlearn,
@@ -30,11 +25,9 @@ import {
   SiSelenium,
   SiActix,
   SiSvelte,
-} from "react-icons/si"; // special kid too
-import { TbBrandAdobeIllustrator } from "react-icons/tb"; // even special kid
-import { MdEmail } from "react-icons/md";
+} from "react-icons/si";
+import { TbBrandAdobeIllustrator } from "react-icons/tb";
 
-// Exporting Icon helper so users can easily use <Icon>Hi</Icon> or custom icons
 export function Icon({
   children,
   icon: IconComponent,
@@ -52,28 +45,6 @@ export function Icon({
   );
 }
 
-// const DEFAULT_ICONS = [
-//   { name: "", icon: FaHtml5, color: "text-orange-500" },
-//   { name: "", icon: FaCss3Alt, color: "text-blue-300" },
-//   { name: "", icon: FaJs, color: "text-yellow-300" },
-//   { name: "", icon: FaReact, color: "text-cyan-300" },
-//   { name: "", icon: SiSvelte, color: "text-orange-500" },
-//   { name: "", icon: RiTailwindCssFill, color: "text-sky-300" },
-//   { name: "", icon: FaNpm, color: "text-red-300" },
-//   { name: "", icon: FaNodeJs, color: "text-emerald-300" },
-//   { name: "", icon: SiExpress, color: "text-emerald-300" },
-//   { name: "", icon: FaPython, color: "text-blue-300" },
-//   { name: "", icon: SiScikitlearn, color: "text-amber-200" },
-//   { name: "", icon: SiPytorch, color: "text-orange-600" },
-//   { name: "", icon: SiTensorflow, color: "text-orange-400" },
-//   { name: "", icon: FaGitAlt, color: "text-red-300" },
-//   { name: "", icon: SiSelenium, color: "text-gray-400" },
-//   { name: "", icon: FaFigma, color: "text-orange-500" },
-//   { name: "", icon: TbBrandAdobeIllustrator, color: "text-orange-400" },
-//   { name: "", icon: FaRust, color: "text-orange-800" },
-//   { name: "", icon: SiActix, color: "text-orange-300" },
-// ];
-//
 const DEFAULT_ICONS = [
   { name: "", icon: FaHtml5, color: "text-white/50" },
   { name: "", icon: FaCss3Alt, color: "text-white/50" },
@@ -97,17 +68,16 @@ const DEFAULT_ICONS = [
 ];
 
 function TechStack({ children, chunk_by, chunkBy, className = "" }) {
-  // Parse chunk size supporting both prop naming styles (e.g. chunk_by={2} or chunk_by="2")
+  // Parse chunk size supporting both prop naming styles
   const rawChunkSize = chunk_by !== undefined ? chunk_by : chunkBy;
   const chunkSize = parseInt(rawChunkSize, 10) || 5;
 
-  // Determine items: if children provided, use them. Otherwise use DEFAULT_ICONS.
+  // Determine items
   const items = useMemo(() => {
     const childrenArray = React.Children.toArray(children);
     if (childrenArray.length > 0) {
       return childrenArray;
     }
-    // Return default mapped icons
     return DEFAULT_ICONS.map((item) => (
       <Icon
         key={item.name}
@@ -130,53 +100,65 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
   const totalChunks = chunks.length;
 
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
+  const containerRef = useRef(null);
   const trackRef = useRef(null);
   const chunkRefs = useRef([]);
   chunkRefs.current = [];
 
-  const addToChunkRefs = (el) => {
+  const addToChunkRefs = useCallback((el) => {
     if (el && !chunkRefs.current.includes(el)) {
       chunkRefs.current.push(el);
     }
-  };
+  }, []);
 
-  // Ensure currentChunkIndex stays valid if items/chunks change
-  useEffect(() => {
-    if (currentChunkIndex >= totalChunks && totalChunks > 0) {
+  // Ensure index is valid
+  useMemo(() => {
+    if (totalChunks > 0 && currentChunkIndex >= totalChunks) {
       setCurrentChunkIndex(0);
     }
   }, [totalChunks, currentChunkIndex]);
 
-  // GSAP transition for track movement
-  useEffect(() => {
-    if (!trackRef.current || totalChunks === 0) return;
+  // GSAP animations with useGSAP for better performance and cleanup
+  useGSAP(
+    () => {
+      if (!trackRef.current || totalChunks === 0) return;
 
-    // Animate the main carousel track sliding
-    gsap.to(trackRef.current, {
-      xPercent: -100 * currentChunkIndex,
-      duration: 0.6,
-      ease: "power3.inOut",
-    });
+      const ctx = gsap.context(() => {
+        // Animate track
+        gsap.to(trackRef.current, {
+          xPercent: -100 * currentChunkIndex,
+          duration: 0.6,
+          ease: "power3.inOut",
+          overwrite: "auto",
+        });
 
-    // Animate subtle pop-in effect for elements inside the currently active chunk
-    if (chunkRefs.current[currentChunkIndex]) {
-      const childrenElements = chunkRefs.current[currentChunkIndex].children;
-      if (childrenElements && childrenElements.length > 0) {
-        gsap.fromTo(
-          childrenElements,
-          { scale: 0.85, opacity: 0.6 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.4,
-            ease: "back.out(1.5)",
-            stagger: 0.05,
-          },
-        );
-      }
-    }
-  }, [currentChunkIndex, totalChunks]);
+        // Animate current chunk children
+        const currentChunkEl = chunkRefs.current[currentChunkIndex];
+        if (currentChunkEl) {
+          const childrenElements = currentChunkEl.children;
+          if (childrenElements && childrenElements.length > 0) {
+            gsap.fromTo(
+              childrenElements,
+              { scale: 0.85, opacity: 0.6 },
+              {
+                scale: 1,
+                opacity: 1,
+                duration: 0.4,
+                ease: "back.out(1.5)",
+                stagger: 0.05,
+                overwrite: "auto",
+              },
+            );
+          }
+        }
+      }, containerRef);
 
+      return () => ctx.revert();
+    },
+    { scope: containerRef, dependencies: [currentChunkIndex, totalChunks] },
+  );
+
+  // Navigation handlers
   const handleNext = useCallback(() => {
     if (totalChunks <= 1) return;
     setCurrentChunkIndex((prev) => (prev + 1) % totalChunks);
@@ -187,20 +169,24 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
     setCurrentChunkIndex((prev) => (prev - 1 + totalChunks) % totalChunks);
   }, [totalChunks]);
 
-  // Auto-advance every 5 seconds
-  useEffect(() => {
-    if (totalChunks <= 1) return;
-
-    // Reset timer whenever currentChunkIndex changes (manual or automatic)
-    const timer = setInterval(() => {
-      handleNext();
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [totalChunks, currentChunkIndex, handleNext]);
+  // Auto-advance with proper cleanup
+  useGSAP(
+    () => {
+      if (totalChunks <= 1) return;
+      const interval = setInterval(() => {
+        handleNext();
+      }, 5000);
+      return () => clearInterval(interval);
+    },
+    {
+      scope: containerRef,
+      dependencies: [totalChunks, currentChunkIndex, handleNext],
+    },
+  );
 
   return (
     <div
+      ref={containerRef}
       className={`flex flex-col items-center w-full max-w-4xl mx-auto ${className}`}
     >
       {/* Horizontal bar containing arrows and icon chunks */}
