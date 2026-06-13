@@ -73,27 +73,35 @@ function App() {
             "
           >
             <div className="title-top py-4">
-              <Title className="w-full title-top jb-mono border-white border-r-2 border-l-2">
+              <Title
+                className="w-full title-top 
+text-[clamp(0.5rem,3vw,1rem)]
+ jb-mono border-white border-r-2 border-l-2"
+              >
                 More About Me
               </Title>
             </div>
             <div className="terminal">
               <Terminal />
             </div>
-            {/* <div className="counter px-2"> */}
-            {/*   <Counter /> */}
-            {/* </div> */}
-            {/* <div className="title-bottom py-4"> */}
-            {/*   <Title className="w-full title-top jb-mono border-white border-r-2 border-l-2"> */}
-            {/*     Thank you for Reading {"<3!"} */}
-            {/*   </Title> */}
-            {/* </div> */}
-            {/* <div className="quote"> */}
-            {/*   <Quote */}
-            {/*     text="The only true wisdom is in knowing you know nothing" */}
-            {/*     origin="Socrates" */}
-            {/*   /> */}
-            {/* </div> */}
+            <div className="counter px-2">
+              <Counter />
+            </div>
+            <div className="title-bottom py-4">
+              <Title
+                className="w-full title-top jb-mono border-white border-r-2 border-l-2
+text-[clamp(0.5rem,3vw,1rem)]
+                "
+              >
+                Thank you for Reading {"<3!"}
+              </Title>
+            </div>
+            <div className="quote">
+              <Quote
+                text="The only true wisdom is in knowing you know nothing"
+                origin="Socrates"
+              />
+            </div>
           </div>
         </div>
       </Card>
