@@ -53,7 +53,7 @@ const stars = await getTotalStars(name);
 function Counter({ children, className = "" }) {
   return (
     <div
-      className={`flex gap-1 md:gap-1 flex-row h-full items-center justify-center w-full mx-auto ${className}`}
+      className={`grid grid-cols-4 gap-[clamp(0.25rem,1.5vw,0.5rem)] w-full items-center ${className}`}
     >
       {children ? (
         children

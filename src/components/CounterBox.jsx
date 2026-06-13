@@ -99,21 +99,21 @@ function CounterBox({
 
   return (
     <div
-      className={`relative border-l-[5px] pl-2 w-28 h-14 pr-6 ${borderClassName} text-white transition-all ${className}`}
+      className={`relative border-l-[4px] pl-2 w-full h-auto py-1 ${borderClassName} text-white transition-all ${className}`}
       {...props}
     >
       {/* Title */}
-      <h2 className="jb-mono text-xs font-medium tracking-wider uppercase">
+      <h2 className="jb-mono text-[clamp(0.5rem,2vw,0.75rem)] font-medium tracking-wider uppercase">
         {finalTitle}
       </h2>
 
       {/* Number and signs */}
-      <div className="jb-mono flex items-baseline mt-1 relative">
-        <span className="jb-mono font-bold text-2xl md:text-3xl leading-none tracking-tight text-white">
+      <div className="jb-mono flex items-baseline mt-0.5 relative flex-wrap">
+        <span className="jb-mono font-bold text-[clamp(.9rem,3vw,1.75rem)] leading-none tracking-tight text-white">
           {displayValue}
         </span>
         {!parsedIsCertain && (
-          <span className="text-3xl font-light ml-1 self-start -mt-1 leading-none select-none">
+          <span className="text-[clamp(.8rem,3vw,1.75rem)] font-light ml-0.5 self-start -mt-0.5 leading-none select-none">
             +
           </span>
         )}
@@ -121,7 +121,7 @@ function CounterBox({
 
       {/* Add Value (if empty "" then none rendered) */}
       {finalAddValue !== "" && (
-        <div className="absolute right-5 bottom-0 text-xs font-light tracking-wider uppercase select-none">
+        <div className="absolute right-1 bottom-1 text-[clamp(0.4rem,1.5vw,0.7rem)] font-light tracking-wider uppercase select-none opacity-80">
           {finalAddValue}
         </div>
       )}
