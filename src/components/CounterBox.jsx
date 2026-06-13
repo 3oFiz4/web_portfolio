@@ -1,6 +1,7 @@
 // src/components/CounterBox.jsx
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 function CounterBox({
   title,
@@ -42,63 +43,156 @@ function CounterBox({
 
   const finalDelay = Number(delay) || 0;
 
-  const valStr = String(finalValue);
-  const totalChars = valStr.length;
-
-  // Initialize state with randomized digits
-  const [displayValue, setDisplayValue] = useState(() => {
-    return valStr
-      .split("")
-      .map((char) => (/\d/.test(char) ? Math.floor(Math.random() * 10) : char))
-      .join("");
+  const containerRef = useRef(null);
+  const displayRef = useRef(null);
+  const animationStateRef = useRef({
+    isVisible: true,
+    settledIndex: 0,
+    isAnimating: false,
   });
 
-  const settledRef = useRef(0);
-
-  useEffect(() => {
-    settledRef.current = 0; // Reset on new target
+  // Memoize processed target value to prevent recalculation
+  const processedValue = useMemo(() => {
+    const valStr = String(finalValue);
     const chars = valStr.split("");
+    const totalChars = valStr.length;
 
-    // Fast ticker running every 50ms to rapidly scramble non-settled digits
-    const interval = setInterval(() => {
-      if (settledRef.current < totalChars) {
-        setDisplayValue(() => {
-          return chars
-            .map((char, idx) => {
-              if (idx < settledRef.current) return char;
-              return /\d/.test(char) ? Math.floor(Math.random() * 10) : char;
-            })
-            .join("");
-        });
-      }
-    }, 50);
-
-    const tweenObj = { progress: 0 };
-    const duration = 1.0 + totalChars * 0.15; // Smooth proportional duration
-
-    // GSAP tween that gradually locks in digits from start to end after the delay
-    const tween = gsap.to(tweenObj, {
-      progress: 1,
-      duration,
-      delay: finalDelay,
-      ease: "power2.out",
-      onUpdate: () => {
-        settledRef.current = Math.floor(tweenObj.progress * totalChars);
-      },
-      onComplete: () => {
-        settledRef.current = totalChars;
-        setDisplayValue(valStr); // Guarantee 100% precision
-      },
-    });
-
-    return () => {
-      clearInterval(interval);
-      tween.kill();
+    return {
+      valStr,
+      chars,
+      totalChars,
+      digitIndices: chars
+        .map((char, idx) => (/\d/.test(char) ? idx : -1))
+        .filter((idx) => idx !== -1),
     };
-  }, [valStr, finalDelay, totalChars]);
+  }, [finalValue]);
+
+  // Pre-generate random digits pool for better performance
+  const randomDigitPool = useMemo(() => {
+    return Array.from({ length: 100 }, () => Math.floor(Math.random() * 10));
+  }, []);
+
+  // Optimized scramble function using cached random values
+  const scrambleDigits = useCallback(
+    (settledIndex) => {
+      const { chars } = processedValue;
+      let randomPoolIndex = Math.floor(Math.random() * 50); // Start from random position
+
+      return chars
+        .map((char, idx) => {
+          if (idx < settledIndex) return char;
+          if (/\d/.test(char)) {
+            const randomDigit =
+              randomDigitPool[randomPoolIndex % randomDigitPool.length];
+            randomPoolIndex++;
+            return randomDigit;
+          }
+          return char;
+        })
+        .join("");
+    },
+    [processedValue, randomDigitPool],
+  );
+
+  const { contextSafe } = useGSAP(
+    () => {
+      const display = displayRef.current;
+      const container = containerRef.current;
+      if (!display || !container) return;
+
+      const state = animationStateRef.current;
+      const { valStr, totalChars } = processedValue;
+
+      // Use GSAP quickSetter for optimal DOM performance
+      const setText = gsap.quickSetter(display, "textContent");
+
+      // Initialize animation state
+      setText(scrambleDigits(0));
+      state.settledIndex = 0;
+      state.isAnimating = true;
+
+      // Create coordinated timeline
+      const tl = gsap.timeline({
+        delay: finalDelay,
+        paused: !state.isVisible, // Start paused if not visible
+        onComplete: () => {
+          state.isAnimating = false;
+          state.settledIndex = totalChars;
+          setText(valStr); // Guarantee final precision
+        },
+      });
+
+      // Animation progress object
+      const animObj = { progress: 0 };
+      const duration = 1.0 + totalChars * 0.15;
+
+      tl.to(animObj, {
+        progress: 1,
+        duration,
+        ease: "power2.out",
+        onUpdate: () => {
+          if (!state.isVisible) return;
+
+          const newSettledIndex = Math.floor(animObj.progress * totalChars);
+
+          // Only update when settled index actually changes
+          if (newSettledIndex !== state.settledIndex) {
+            state.settledIndex = newSettledIndex;
+          }
+        },
+      });
+
+      // Use GSAP ticker instead of setInterval for better performance
+      let tickerFrameCount = 0;
+      const scrambleTicker = () => {
+        if (!state.isAnimating || !state.isVisible) return;
+
+        // Throttle to every 3rd frame for ~20fps scrambling (smoother than 50ms interval)
+        tickerFrameCount++;
+        if (tickerFrameCount % 3 !== 0) return;
+
+        if (state.settledIndex < totalChars) {
+          setText(scrambleDigits(state.settledIndex));
+        }
+      };
+
+      gsap.ticker.add(scrambleTicker);
+
+      // Intersection Observer for performance optimization
+      const io = new IntersectionObserver(
+        (entries) => {
+          const isVisible = entries[0].isIntersecting;
+          if (state.isVisible !== isVisible) {
+            state.isVisible = isVisible;
+
+            // Control timeline playback based on visibility
+            if (isVisible) {
+              tl.play();
+            } else {
+              tl.pause();
+            }
+          }
+        },
+        { threshold: 0, rootMargin: "100px" },
+      );
+
+      io.observe(container);
+
+      return () => {
+        io.disconnect();
+        gsap.ticker.remove(scrambleTicker);
+        tl.kill();
+      };
+    },
+    {
+      scope: containerRef,
+      dependencies: [finalValue, finalDelay],
+    },
+  );
 
   return (
     <div
+      ref={containerRef}
       className={`relative border-l-[4px] pl-2 w-full h-auto py-1 ${borderClassName} text-white transition-all ${className}`}
       {...props}
     >
@@ -109,8 +203,11 @@ function CounterBox({
 
       {/* Number and signs */}
       <div className="jb-mono flex items-baseline mt-0.5 relative flex-wrap">
-        <span className="jb-mono font-bold text-[clamp(.9rem,3vw,1.75rem)] leading-none tracking-tight text-white">
-          {displayValue}
+        <span
+          ref={displayRef}
+          className="jb-mono font-bold text-[clamp(.9rem,3vw,1.75rem)] leading-none tracking-tight text-white"
+        >
+          {processedValue.valStr}
         </span>
         {!parsedIsCertain && (
           <span className="text-[clamp(.8rem,3vw,1.75rem)] font-light ml-0.5 self-start -mt-0.5 leading-none select-none">
