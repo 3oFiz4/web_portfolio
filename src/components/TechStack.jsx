@@ -111,9 +111,9 @@ function TechStack({ children, chunk_by, chunkBy, className = "" }) {
     return DEFAULT_ICONS.map((item) => (
       <Icon
         key={item.name}
-        className="sm:gap-3.5 gap-1 text-sm md:text-base sm:px-6 px-4 py-2"
+        className="sm:gap-3.2 gap-1 text-xs md:text-base sm:px-6 px-[clamp(0.2rem,1vw,1rem)] py-1"
       >
-        <item.icon className={`sm:size-8 size-4 ${item.color}`} />
+        <item.icon className={`text-[clamp(1.3rem,3vw,2rem)] ${item.color}`} />
       </Icon>
     ));
   }, [children]);
