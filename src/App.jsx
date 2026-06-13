@@ -81,11 +81,17 @@ text-[clamp(0.5rem,3vw,1rem)]
                 More About Me
               </Title>
             </div>
-            <div className="terminal">
-              <Terminal />
-            </div>
             <div className="counter px-2">
               <Counter />
+            </div>
+            <div className="quote">
+              <Quote
+                text="The only true wisdom is in knowing you know nothing"
+                origin="Socrates"
+              />
+            </div>
+            <div className="terminal">
+              <Terminal />
             </div>
             <div className="title-bottom py-4">
               <Title
@@ -95,12 +101,6 @@ text-[clamp(0.5rem,3vw,1rem)]
               >
                 Thank you for Reading {"<3!"}
               </Title>
-            </div>
-            <div className="quote">
-              <Quote
-                text="The only true wisdom is in knowing you know nothing"
-                origin="Socrates"
-              />
             </div>
           </div>
         </div>
