@@ -1,84 +1,117 @@
-import { useRef, useEffect } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
-function ButtonFrame({ children, className = "", ...props }) {
+gsap.registerPlugin(useGSAP);
+
+const PATH_LENGTH = 40;
+const BASE_CLASS =
+  "relative inline-flex items-center justify-center cursor-pointer bg-transparent border-none outline-none";
+
+function ButtonFrame({
+  children,
+  className = "",
+  onMouseEnter,
+  onMouseLeave,
+  ...props
+}) {
   const buttonRef = useRef(null);
   const bgRef = useRef(null);
+  const hoverTl = useRef(null);
 
   const tlRef = useRef(null);
   const trRef = useRef(null);
   const blRef = useRef(null);
   const brRef = useRef(null);
 
-  useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
+  const pathRefs = useMemo(() => [tlRef, trRef, blRef, brRef], []);
+  const buttonClassName = useMemo(
+    () => `${BASE_CLASS} ${className}`.trim(),
+    [className],
+  );
 
-    const paths = [tlRef.current, trRef.current, blRef.current, brRef.current];
+  useGSAP(
+    () => {
+      const bg = bgRef.current;
+      const paths = pathRefs.map((ref) => ref.current).filter(Boolean);
 
-    gsap.set(bgRef.current, { opacity: 0 });
+      if (!bg || paths.length !== 4) return;
 
-    paths.forEach((path) => {
-      if (!path) return;
+      // useGSAP already uses gsap.context internally and cleans up on unmount.
+      hoverTl.current = gsap.timeline({ paused: true });
 
-      const length = path.getTotalLength();
-
-      gsap.set(path, {
-        strokeDasharray: length,
-        strokeDashoffset: length,
-      });
-    });
-
-    const hoverTl = gsap.timeline({ paused: true });
-
-    hoverTl
-      .to(
-        bgRef.current,
-        {
-          opacity: 1,
-          duration: 0.2,
-          ease: "power2.out",
-        },
-        0,
-      )
-      .to(
-        paths,
-        {
-          strokeDashoffset: 0,
-          duration: 0.05,
-          ease: "power2.out",
-          stagger: {
-            each: 0.05,
-            from: "start",
+      hoverTl.current
+        .to(
+          bg,
+          {
+            autoAlpha: 1,
+            duration: 0.2,
+            ease: "power2.out",
           },
-        },
-        0,
-      );
+          0,
+        )
+        .to(
+          paths,
+          {
+            strokeDashoffset: 0,
+            duration: 0.05,
+            ease: "power2.out",
+            stagger: 0.05,
+          },
+          0,
+        );
 
-    const onEnter = () => hoverTl.play();
-    const onLeave = () => hoverTl.reverse();
+      return () => {
+        hoverTl.current?.kill();
+        hoverTl.current = null;
+      };
+    },
+    { scope: buttonRef },
+  );
 
-    button.addEventListener("mouseenter", onEnter);
-    button.addEventListener("mouseleave", onLeave);
-
-    return () => {
-      button.removeEventListener("mouseenter", onEnter);
-      button.removeEventListener("mouseleave", onLeave);
-    };
+  const playHover = useCallback(() => {
+    hoverTl.current?.play();
   }, []);
+
+  const reverseHover = useCallback(() => {
+    hoverTl.current?.reverse();
+  }, []);
+
+  const handleMouseEnter = useCallback(
+    (event) => {
+      playHover();
+      onMouseEnter?.(event);
+    },
+    [onMouseEnter, playHover],
+  );
+
+  const handleMouseLeave = useCallback(
+    (event) => {
+      reverseHover();
+      onMouseLeave?.(event);
+    },
+    [onMouseLeave, reverseHover],
+  );
 
   return (
     <button
       ref={buttonRef}
-      className={`relative inline-flex items-center justify-center cursor-pointer bg-transparent border-none outline-none ${className}`}
+      className={buttonClassName}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <div ref={bgRef} className="absolute inset-0 bg-white/20 rounded-sm " />
+      <div
+        ref={bgRef}
+        className="pointer-events-none absolute inset-0 bg-white/20 rounded-sm opacity-0 invisible"
+      />
 
       <svg
-        className="absolute top-0 left-0 w-4 h-4 "
+        className="pointer-events-none absolute top-0 left-0 w-4 h-4"
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
       >
         <path
           ref={tlRef}
@@ -87,13 +120,17 @@ function ButtonFrame({ children, className = "", ...props }) {
           strokeWidth="5"
           fill="none"
           strokeLinecap="square"
+          strokeDasharray={PATH_LENGTH}
+          strokeDashoffset={PATH_LENGTH}
         />
       </svg>
 
       <svg
-        className="absolute top-0 right-0 w-4 h-4"
+        className="pointer-events-none absolute top-0 right-0 w-4 h-4"
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
       >
         <path
           ref={trRef}
@@ -102,13 +139,17 @@ function ButtonFrame({ children, className = "", ...props }) {
           strokeWidth="5"
           fill="none"
           strokeLinecap="square"
+          strokeDasharray={PATH_LENGTH}
+          strokeDashoffset={PATH_LENGTH}
         />
       </svg>
 
       <svg
-        className="absolute bottom-0 left-0 w-4 h-4 "
+        className="pointer-events-none absolute bottom-0 left-0 w-4 h-4"
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
       >
         <path
           ref={blRef}
@@ -117,13 +158,17 @@ function ButtonFrame({ children, className = "", ...props }) {
           strokeWidth="5"
           fill="none"
           strokeLinecap="square"
+          strokeDasharray={PATH_LENGTH}
+          strokeDashoffset={PATH_LENGTH}
         />
       </svg>
 
       <svg
-        className="absolute bottom-0 right-0 w-4 h-4"
+        className="pointer-events-none absolute bottom-0 right-0 w-4 h-4"
         viewBox="0 0 60 60"
         preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
       >
         <path
           ref={brRef}
@@ -132,6 +177,8 @@ function ButtonFrame({ children, className = "", ...props }) {
           strokeWidth="5"
           fill="none"
           strokeLinecap="square"
+          strokeDasharray={PATH_LENGTH}
+          strokeDashoffset={PATH_LENGTH}
         />
       </svg>
 
