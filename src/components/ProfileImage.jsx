@@ -141,6 +141,8 @@ function ProfileImage({ src, alt = "" }) {
         <img
           src={src}
           alt={alt}
+          fetchPriority="high" /* Highlights it for the browser network */
+          loading="eager" /* Do not lazy load the primary image */
           className="object-cover w-full h-full border-2 border-white"
         />
 
