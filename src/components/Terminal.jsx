@@ -7,7 +7,16 @@ function Terminal({ className = "" }) {
       className={`relative border border-white overflow-hidden w-full h-full ${className}`}
     >
       {/* CHANGED: Replaced text-[10px] with a fluid text clamp, added whitespace-pre-wrap, and safe padding/overflow rules */}
-      <pre className="jb-mono px-4 py-3 h-full text-[clamp(0.6rem,2vw,0.65rem)] font-light text-white whitespace-pre-wrap overflow-y-auto break-words">
+      <pre
+        className="jb-mono px-4 py-3 h-full text-[clamp(0.6rem,2vw,0.65rem)] font-light text-white whitespace-pre-wrap overflow-y-auto break-words
+      overflow-y-auto max-h-full touch-pan-y
+      scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent
+        "
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(255,255,255,0.1) transparent",
+        }}
+      >
         v0.0.1 This website is still early, please wait for another feature! ty!
         <br />
         Coming soon:

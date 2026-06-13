@@ -114,7 +114,7 @@ function Title({
   return (
     <h1
       ref={containerRef}
-      className={` relative overflow-hidden inline-flex items-center justify-center tracking-tight select-none ${finalBgClassName} ${finalTextClassName} ${className}`}
+      className={`relative overflow-hidden inline-flex items-center justify-center tracking-tight select-none ${finalBgClassName} ${finalTextClassName} ${className}`}
       {...props}
     >
       {/* Flawless continuous MovingStripes track */}
