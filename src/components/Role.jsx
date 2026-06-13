@@ -1,6 +1,7 @@
 // src/components/Role.jsx
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const BASE_SPEED = 18;
 const DRAG_MULTIPLIER = 1.35;
@@ -14,106 +15,150 @@ function Role({ list = [] }) {
   const trackRef = useRef(null);
   const sequenceRef = useRef(null);
 
-  const xRef = useRef(0);
-  const currentSpeedRef = useRef(BASE_SPEED);
-  const targetSpeedRef = useRef(BASE_SPEED);
-  const sequenceWidthRef = useRef(0);
+  // Consolidated animation state
+  const animationStateRef = useRef({
+    x: 0,
+    currentSpeed: BASE_SPEED,
+    targetSpeed: BASE_SPEED,
+    sequenceWidth: 0,
+    isHovering: false,
+    isDragging: false,
+    dragStartX: 0,
+    dragDistance: 0,
+  });
 
-  const isHoveringRef = useRef(false);
-  const isDraggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragDistanceRef = useRef(0);
+  // Memoize list to prevent unnecessary re-renders
+  const memoizedList = useMemo(() => list, [list]);
 
-  useLayoutEffect(() => {
-    if (!list.length) return;
+  const { contextSafe } = useGSAP(
+    () => {
+      if (!memoizedList.length) return;
 
-    const viewport = viewportRef.current;
-    const track = trackRef.current;
-    const sequence = sequenceRef.current;
-    if (!viewport || !track || !sequence) return;
+      const viewport = viewportRef.current;
+      const track = trackRef.current;
+      const sequence = sequenceRef.current;
+      if (!viewport || !track || !sequence) return;
 
-    const setX = gsap.quickSetter(track, "x", "px");
+      const state = animationStateRef.current;
+      let resizeTimeout = null;
 
-    const measure = () => {
-      const width = sequence.offsetWidth;
-      if (!width) return;
+      // Use quickSetter for optimal performance
+      const setX = gsap.quickSetter(track, "x", "px");
 
-      sequenceWidthRef.current = width;
+      const measure = () => {
+        const width = sequence.offsetWidth;
+        if (!width) return;
 
-      if (xRef.current === 0) {
-        xRef.current = -width;
-        setX(xRef.current);
-      } else {
-        while (xRef.current >= 0) xRef.current -= width;
-        while (xRef.current <= -2 * width) xRef.current += width;
-        setX(xRef.current);
-      }
-    };
+        state.sequenceWidth = width;
 
-    measure();
+        // Initialize position
+        if (state.x === 0) {
+          state.x = -width;
+          setX(state.x);
+        } else {
+          // Normalize position on resize
+          while (state.x >= 0) state.x -= width;
+          while (state.x <= -2 * width) state.x += width;
+          setX(state.x);
+        }
+      };
 
-    const ro = new ResizeObserver(measure);
-    ro.observe(viewport);
-    ro.observe(sequence);
+      // Single, clean ticker function
+      const tick = (time, deltaTime) => {
+        const width = state.sequenceWidth;
+        if (!width) return;
 
-    const tick = (_, deltaTime) => {
-      const width = sequenceWidthRef.current;
-      if (!width) return;
+        // Calculate target speed based on current interaction state
+        if (state.isDragging) {
+          state.targetSpeed = gsap.utils.clamp(
+            -MAX_DRAG_SPEED,
+            MAX_DRAG_SPEED,
+            state.dragDistance * DRAG_MULTIPLIER,
+          );
+        } else if (state.isHovering) {
+          state.targetSpeed = 0;
+        } else {
+          state.targetSpeed = BASE_SPEED;
+        }
 
-      if (isDraggingRef.current) {
-        targetSpeedRef.current = gsap.utils.clamp(
-          -MAX_DRAG_SPEED,
-          MAX_DRAG_SPEED,
-          dragDistanceRef.current * DRAG_MULTIPLIER,
+        // Smooth interpolation
+        state.currentSpeed = gsap.utils.interpolate(
+          state.currentSpeed,
+          state.targetSpeed,
+          state.isDragging ? 0.18 : SMOOTHNESS,
         );
-      } else if (isHoveringRef.current) {
-        targetSpeedRef.current = 0;
-      } else {
-        targetSpeedRef.current = BASE_SPEED;
-      }
 
-      currentSpeedRef.current = gsap.utils.interpolate(
-        currentSpeedRef.current,
-        targetSpeedRef.current,
-        isDraggingRef.current ? 0.18 : SMOOTHNESS,
-      );
+        // Update position
+        state.x += state.currentSpeed * (deltaTime / 1000);
 
-      xRef.current += currentSpeedRef.current * (deltaTime / 1000);
+        // Handle infinite loop
+        if (state.x >= 0) state.x -= width;
+        if (state.x <= -2 * width) state.x += width;
 
-      if (xRef.current >= 0) xRef.current -= width;
-      if (xRef.current <= -2 * width) xRef.current += width;
+        setX(state.x);
+      };
 
-      setX(xRef.current);
-    };
+      // Debounced resize handler
+      const debouncedMeasure = () => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(measure, 16);
+      };
 
-    gsap.ticker.add(tick);
+      // Setup observers
+      const ro = new ResizeObserver(debouncedMeasure);
+      ro.observe(viewport);
+      ro.observe(sequence);
 
-    return () => {
-      ro.disconnect();
-      gsap.ticker.remove(tick);
-    };
-  }, [list]);
+      // Initial setup
+      measure();
 
-  const handlePointerDown = (e) => {
-    isDraggingRef.current = true;
-    dragStartXRef.current = e.clientX;
-    dragDistanceRef.current = 0;
+      // Start the ticker - this ensures it runs from the beginning
+      gsap.ticker.add(tick);
+
+      return () => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        ro.disconnect();
+        gsap.ticker.remove(tick);
+      };
+    },
+    { scope: wrapperRef, dependencies: [memoizedList] },
+  );
+
+  // Event handlers using contextSafe
+  const handlePointerDown = contextSafe((e) => {
+    const state = animationStateRef.current;
+    state.isDragging = true;
+    state.dragStartX = e.clientX;
+    state.dragDistance = 0;
     e.currentTarget.setPointerCapture?.(e.pointerId);
-  };
+  });
 
-  const handlePointerMove = (e) => {
-    if (!isDraggingRef.current) return;
-    dragDistanceRef.current = e.clientX - dragStartXRef.current;
-  };
+  const handlePointerMove = contextSafe((e) => {
+    const state = animationStateRef.current;
+    if (!state.isDragging) return;
+    state.dragDistance = e.clientX - state.dragStartX;
+  });
 
-  const stopDragging = (e) => {
-    if (!isDraggingRef.current) return;
-    isDraggingRef.current = false;
-    dragDistanceRef.current = 0;
+  const stopDragging = contextSafe((e) => {
+    const state = animationStateRef.current;
+    if (!state.isDragging) return;
+    state.isDragging = false;
+    state.dragDistance = 0;
     e.currentTarget.releasePointerCapture?.(e.pointerId);
-  };
+  });
 
-  if (!list.length) return null;
+  // Memoized mouse handlers
+  const handleMouseEnter = useCallback(() => {
+    animationStateRef.current.isHovering = true;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    animationStateRef.current.isHovering = false;
+  }, []);
+
+  const preventDragStart = useCallback((e) => e.preventDefault(), []);
+
+  if (!memoizedList.length) return null;
 
   return (
     <div ref={wrapperRef} className="relative w-full overflow-hidden">
@@ -140,13 +185,13 @@ function Role({ list = [] }) {
       <div
         ref={viewportRef}
         className="relative w-full select-none cursor-grab overflow-hidden active:cursor-grabbing"
-        onMouseEnter={() => (isHoveringRef.current = true)}
-        onMouseLeave={() => (isHoveringRef.current = false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={stopDragging}
         onPointerCancel={stopDragging}
-        onDragStart={(e) => e.preventDefault()}
+        onDragStart={preventDragStart}
         style={{ touchAction: "none" }}
       >
         <div
@@ -160,7 +205,7 @@ function Role({ list = [] }) {
               className="flex shrink-0 items-center gap-6 pr-6"
               aria-hidden={copyIndex !== 0}
             >
-              {list.map((role, roleIndex) => (
+              {memoizedList.map((role, roleIndex) => (
                 <span
                   key={`${copyIndex}-${roleIndex}`}
                   className="text-white w-full jb-mono text-center
