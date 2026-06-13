@@ -51,10 +51,7 @@ function App() {
           <div className="content content-grid">
             <div className="profile">
               <div>
-                <ProfileImage
-                  src={"../src/components/profile_asset/pfp.avif"}
-                  alt="Profile"
-                />
+                <ProfileImage src={"../profile_asset/pfp.avif"} alt="Profile" />
                 <Contact />
               </div>
             </div>
