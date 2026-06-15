@@ -68,6 +68,7 @@ body {
     padding: 1rem 0;
   }
 }
+
 /* ── FONTS ────────────────────────────────────── */
 @font-face {
   font-family: "JetBrains";
@@ -281,4 +282,18 @@ body {
   display: inline-block;
   padding: 20px; /* Space for outside frame */
   background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+}
+
+.main-grid > div {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* SLIDER */
+@media (max-width: 800px) {
+  .slider {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    top: 0 !important;
+    height: "calc(100% + 100%)";
+  }
 }

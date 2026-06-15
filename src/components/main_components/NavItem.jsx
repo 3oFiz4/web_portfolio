@@ -227,7 +227,7 @@ function NavItem({ label, href }) {
         scrollTlRef.current.fromTo(
           track,
           { x: -singleWidth },
-          { x: 0, duration: 20, ease: "none" }
+          { x: 0, duration: 20, ease: "none" },
         );
 
         // Scroll loop — mask track
@@ -235,7 +235,7 @@ function NavItem({ label, href }) {
         scrollMaskTlRef.current.fromTo(
           mask,
           { x: -singleWidth },
-          { x: 0, duration: 20, ease: "none" }
+          { x: 0, duration: 20, ease: "none" },
         );
       });
     } else {
@@ -260,7 +260,7 @@ function NavItem({ label, href }) {
   const handleMouseLeave = () => hoverTlRef.current?.reverse();
 
   const handleClick = () => {
-    window.location.hash = `#${href}`;
+    window.location.hash = `${href}`;
   };
 
   return (

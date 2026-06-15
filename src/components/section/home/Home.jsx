@@ -14,7 +14,7 @@ function Home() {
   return (
     <>
       {/* CONTENT */}
-      <div className="content content-grid">
+      <div className="content content-grid relative">
         <div className="profile">
           <div>
             <ProfileImage src={"../profile_asset/pfp.avif"} alt="Profile" />
@@ -30,11 +30,7 @@ function Home() {
       </div>
 
       {/* FOOTER */}
-      <div
-        className="footer footer-grid 
-
-      "
-      >
+      <div className="footer footer-grid">
         <div className="title-top py-4">
           <Title
             className="w-full title-top 
@@ -56,7 +52,7 @@ jb-mono border-white border-r-2 border-l-2"
         <div className="terminal">
           <Terminal />
         </div>
-        <div className="title-bottom py-4">
+        <div className="title-bottom py-2">
           <Title
             className="w-full title-top jb-mono border-white border-r-2 border-l-2
 text-[clamp(0.5rem,3vw,1rem)]

@@ -2,9 +2,7 @@
 import React from "react";
 import NavItem from "./NavItem";
 
-const currentHash = window.location.hash;
-
-function NavBar({ items }) {
+function NavBar({ items, currentPath, onNavigate }) {
   return (
     <div className="outer nav-container">
       <div className="inner nav-container">
@@ -19,8 +17,9 @@ function NavBar({ items }) {
           >
             <NavItem
               label={item.label}
-              href={item.label}
-              isActive={currentHash}
+              href={item.href}
+              isActive={currentPath === item.href} // Boolean calculated by React Router
+              onNavigate={onNavigate} // Pass the click trigger down
             />
           </div>
         ))}
