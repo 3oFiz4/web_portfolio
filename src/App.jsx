@@ -1,14 +1,28 @@
 // src/App.jsx
 import React, { useRef, useEffect } from "react";
-import Home from "./components/section/home/Home";
+// import Home from "./components/section/home/Home";
 import Card from "./components/main_components/Card";
+import NavBar from "./components/main_components/NavBar";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
+// Dummy components, delete this when finished
+const Home = () => (
+  <div className="p-8">
+    <p className="text-white text-2xl">Hi!</p>
+  </div>
+);
+const Contact = () => (
+  <div className="p-8">
+    <p className="text-white text-2xl">Hello World</p>
+  </div>
+);
+
 const NAV_LINKS = [
+  { label: "home", href: "/" },
   { label: "project", href: "#project" },
   { label: "about", href: "#about" },
-  { label: "contact", href: "#contact" },
+  { label: "contact", href: "/contact" },
 ];
 
 function App() {
@@ -33,9 +47,9 @@ function App() {
       <Card ref={cardRef}>
         <div className="main-grid w-full h-[100dvh] max-h-[100dvh] overflow-y-auto px-4 pb-12 box-border">
           {/* HEADER */}
-          {/* <div className="header"> */}
-          {/*   <NavBar items={NAV_LINKS} /> */}
-          {/* </div> */}
+          <div className="header">
+            <NavBar items={NAV_LINKS} />
+          </div>
           <Home />
         </div>
       </Card>

@@ -1,5 +1,4 @@
 import React from "react";
-import NavBar from "./components/NavBar";
 import ContentGrid from "./components/ContentGrid";
 import ProfileImage from "./components/ProfileImage";
 import Biography from "./components/Biography";
