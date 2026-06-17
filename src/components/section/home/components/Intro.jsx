@@ -28,23 +28,41 @@ h-52 max-h-52 md:h-full md:max-h-full
       }}
     >
       <p>
-        I am a developer in Indonesia with expertise in UI/UX design, Front-End
-        development, and System Architecture.
+        I am a <b>College Student and a Junior Freelance</b> developer in Bali,
+        Indonesia with expertise in{" "}
+        <b>
+          UI/UX design, Front-End development, TUI Scripting and System
+          Architecture
+        </b>
+        .
       </p>
       <br />
       <p>
-        Challenge and creation is what drives me. It is a part that empower my
-        curiosity, growrth, and understanding.
+        I am naturally born as an <b>extremely curious person</b>, and easily
+        adaptable to any circumstances. I tend to{" "}
+        <b>favor things that has "process" or "mechanism" behind</b>, so I am
+        not stuck on logic and rational fields, but also field that provides
+        ambiguous and probabilistic nature, call it Psychology, and Finance.
       </p>
       <br />
       <p>
-        I am interested in other field such as: Mathematics, Psychology,
-        Finance, Machine Learning and Videography.
+        Most of my <b>projects are open-sourced on GitHub</b> and everybody can
+        see it. There I mostly build what I believe to simply satisfy my
+        curiosity, and to apply what seems to be impossible, is possible.
       </p>
       <br />
       <p>
-        I mostly spend my time creating random projects, solving puzzles,
-        reading, discussing and writing.
+        I am interested in other field such as (ranked): Mathematics,
+        Psychology, Finance, Machine Learning and Videography.
+      </p>
+      <br />
+      <p>
+        Irrelevant info:
+        <br />- I am ENFP
+        <br />- I am rejected from Psych. degree, so I ended up in Computer
+        Science lol
+        <br />- I read too many philosophy book, so expect me when I said the
+        most unhinged stuff
       </p>
     </div>
   );

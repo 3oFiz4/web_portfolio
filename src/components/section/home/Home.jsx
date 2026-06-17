@@ -48,6 +48,7 @@ function Home() {
             text="The only true wisdom is in knowing you know nothing"
             origin="Socrates"
           />
+          {/* how i feel after saying shit: PHONKTUNGTUNGSAHURx666 */}
         </div>
         <div className="terminal">
           <Terminal />

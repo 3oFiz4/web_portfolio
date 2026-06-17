@@ -87,7 +87,7 @@ const certificates = [
         </p>
         <br />
         <p className="">
-          This program is happened by a team of 4 people. Where I am taking the
+          This program is happened by a team of 5 people. Where I am taking the
           role of a SOC Manager, 3 of my friends are SOC Analayst, and the other
           is a supporter. This program taught me a lot about leadership and
           decision-making under pressure. Not only that, but we are also taught

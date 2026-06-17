@@ -17,14 +17,15 @@ function Terminal({ className = "" }) {
           scrollbarColor: "rgba(255,255,255,0.1) transparent",
         }}
       >
-        v0.0.2 (overhaul on animation performance and mobile-support viewport)
+        v0.0.3 (Add certificate section)
         <br />
         <br />
         Coming soon:
         <br /> [x] Mobile-support (v0.2)
-        <br /> [x]-Anim. performance improvement (v0.2)
-        <br /> [ ] Projects
-        <br /> [ ] About
+        <br /> [x] Anim. performance improvement (v0.2)
+        <br /> [x] Certificate Section
+        <br /> [ ] Testimonial Section
+        <br /> [ ] Experience Section
         <br /> [ ] ???
         <br />
       </pre>
