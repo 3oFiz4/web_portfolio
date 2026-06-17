@@ -1,44 +1,38 @@
 // src/App.jsx
 import React, { useRef, useEffect, useState } from "react";
 import Home from "./components/section/home/Home";
+import Certif from "./components/section/certif/Certif";
 import Card from "./components/main_components/Card";
 import NavBar from "./components/main_components/NavBar";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-// Contact component
-const Contact = () => (
-  <div className="p-8">
-    <p className="text-white text-2xl">Hello World from Contact!</p>
-  </div>
-);
-
-// Map the hash to the actual component
+// map first
 const COMPONENT_MAP = {
   "#home": Home,
-  "#contact": Contact,
+  "#certificate": Certif, // in next commit, i think its a good idea to shorten it to "Certif."
 };
-
+// then links
 const NAV_LINKS = [
   { label: "home", href: "#home" },
-  { label: "contact", href: "#contact" },
+  { label: "certificate", href: "#certificate" },
 ];
 
 function App() {
   const cardRef = useRef(null);
   const overlayRef = useRef(null);
 
-  // Track our hashes
+  // track the hashes
   const currentHashRef = useRef(window.location.hash || "#home");
   const [displayHash, setDisplayHash] = useState(currentHashRef.current);
   const isAnimating = useRef(false);
 
-  // useGSAP handles context cleanup automatically
+  // uses `useGSAP` handles context cleanup automatically
   const { contextSafe } = useGSAP(() => {
-    // 0. Set overlay initially off-screen to the right
+    // 0. set overlay initially off-screen to the right
     gsap.set(overlayRef.current, { xPercent: 100 });
 
-    // Card entrance animation
+    // card entrance animation
     gsap.from(cardRef.current, {
       yPercent: 5,
       opacity: 0,
@@ -47,9 +41,9 @@ function App() {
     });
   }, []);
 
-  // contextSafe allows us to trigger GSAP animations inside event listeners safely
+  // contextSafe here allows trigger GSAP animations inside event listeners safely
   const handleTransition = contextSafe((newHash) => {
-    // Prevent animation spam or animating to the same page
+    // avoid click animation spam or animating to the same page
     if (isAnimating.current || newHash === currentHashRef.current) return;
 
     isAnimating.current = true;
@@ -57,23 +51,23 @@ function App() {
     const tl = gsap.timeline({
       onComplete: () => {
         isAnimating.current = false;
-        // 3. Clear animation: Reset position hidden on the right
+        // 3. clear animation: Reset position hidden on the right
         gsap.set(overlayRef.current, { xPercent: 100 });
       },
     });
 
-    // 1. First! Slide in from the right to cover the page grid
+    // 1. first, slide in from the right to cover the page grid
     tl.to(overlayRef.current, {
       xPercent: 0,
-      duration: 0.5,
+      duration: 0.4,
       ease: "power3.inOut",
       onComplete: () => {
-        // 2. Second! Instantly change component when overlay covers the screen entirely
+        // 2. then, change component when overlay covers the screen entirely
         currentHashRef.current = newHash;
         setDisplayHash(newHash);
       },
     })
-      // 3. Third! Slide out to the left end
+      // 3. finally, slide out to the left end
       .to(overlayRef.current, {
         xPercent: -100,
         duration: 0.5,

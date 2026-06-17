@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../src/components/section/certif/Certif.css";
 html,
 body {
   width: 100%;
