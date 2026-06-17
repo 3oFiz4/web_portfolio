@@ -14,7 +14,7 @@ function Home() {
   return (
     <>
       {/* CONTENT */}
-      <div className="content content-grid">
+      <div className="content content-grid z-0">
         <div className="profile">
           <div>
             <ProfileImage src={"../profile_asset/pfp.avif"} alt="Profile" />
@@ -30,16 +30,12 @@ function Home() {
       </div>
 
       {/* FOOTER */}
-      <div
-        className="footer footer-grid 
-
-      "
-      >
+      <div className="footer footer-grid z-0">
         <div className="title-top py-4">
           <Title
             className="w-full title-top 
-text-[clamp(0.5rem,3vw,1rem)]
-jb-mono border-white border-r-2 border-l-2"
+      text-[clamp(0.5rem,3vw,1rem)]
+      jb-mono border-white border-r-2 border-l-2"
           >
             More About Me
           </Title>
@@ -59,8 +55,8 @@ jb-mono border-white border-r-2 border-l-2"
         <div className="title-bottom py-4">
           <Title
             className="w-full title-top jb-mono border-white border-r-2 border-l-2
-text-[clamp(0.5rem,3vw,1rem)]
-          "
+      text-[clamp(0.5rem,3vw,1rem)]
+                "
           >
             Thank you for Reading {"<3!"}
           </Title>

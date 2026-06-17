@@ -1,17 +1,17 @@
 // src/App.jsx
 import React, { useRef, useEffect } from "react";
-// import Home from "./components/section/home/Home";
+import Home from "./components/section/home/Home";
 import Card from "./components/main_components/Card";
 import NavBar from "./components/main_components/NavBar";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
 // Dummy components, delete this when finished
-const Home = () => (
-  <div className="p-8">
-    <p className="text-white text-2xl">Hi!</p>
-  </div>
-);
+// const Home = () => (
+//   <div className="p-8">
+//     <p className="text-white text-2xl">Hi!</p>
+//   </div>
+// );
 const Contact = () => (
   <div className="p-8">
     <p className="text-white text-2xl">Hello World</p>
@@ -19,10 +19,10 @@ const Contact = () => (
 );
 
 const NAV_LINKS = [
-  { label: "home", href: "/" },
-  { label: "project", href: "#project" },
-  { label: "about", href: "#about" },
-  { label: "contact", href: "/contact" },
+  { label: "home", href: "#home" },
+  // { label: "project", href: "#project" },
+  // { label: "about", href: "#about" },
+  { label: "contact", href: "#contact" },
 ];
 
 function App() {
@@ -50,7 +50,17 @@ function App() {
           <div className="header">
             <NavBar items={NAV_LINKS} />
           </div>
-          <Home />
+          <div className="page-grid relative">
+            <Home />
+            <div
+              className="
+              z-1
+              absolute inset-0
+              pointer-events-none
+              bg-white
+            "
+            />
+          </div>
         </div>
       </Card>
       <div></div>
