@@ -3,6 +3,21 @@ import React from "react";
 import ButtonFrame from "./ButtonFrame";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { track } from "@vercel/analytics";
+
+const openInbound = async (e, url, platform) => {
+  e.preventDefault(); // Stop immediate navigation
+
+  try {
+    // Tracks exactly which platform was clicked dynamically!
+    await track("Outbound Link Clicked", { platform: platform });
+  } catch (error) {
+    console.error("Analytics failed", error);
+  } finally {
+    // Opens the specific URL passed to the function
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+};
 
 // complete - mobie responsive
 function Contact() {
@@ -12,9 +27,12 @@ function Contact() {
       <div className="w-full h-full flex flex-row items-center">
         <ButtonFrame
           className="w-full h-full"
-          onClick={() => window.open("https://github.com/3oFiz4", "_blank")}
+          onClick={(e) => openInbound(e, "https://github.com/3oFiz4", "GitHub")}
         >
           <a
+            onClick={(e) =>
+              openInbound(e, "https://github.com/3oFiz4", "GitHub")
+            }
             href="https://github.com/3oFiz4"
             target="_blank"
             rel="noopener noreferrer"
@@ -22,7 +40,9 @@ function Contact() {
           >
             <FaGithub
               className="text-white"
-              onClick={() => window.open("https://github.com/3oFiz4", "_blank")}
+              onClick={(e) =>
+                openInbound(e, "https://github.com/3oFiz4", "GitHub")
+              }
               style={{
                 fontSize: resize_equation,
               }}
@@ -30,7 +50,11 @@ function Contact() {
           </a>
         </ButtonFrame>
         <ButtonFrame className="w-full h-full">
+          {/*no track this*/}
           <a
+            onClick={(e) =>
+              openInbound(e, "mailto:3ofiz4gr@gmail.com", "Gmail")
+            }
             href="mailto:3ofiz4gr@gmail.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -47,14 +71,22 @@ function Contact() {
         </ButtonFrame>
         <ButtonFrame
           className="w-full h-full"
-          onClick={() =>
-            window.open(
+          onClick={(e) =>
+            openInbound(
+              e,
               "https://www.linkedin.com/in/jordan-cora-5a4719413/",
-              "_blank",
+              "Linkedin",
             )
           }
         >
           <a
+            onClick={(e) =>
+              openInbound(
+                e,
+                "https://www.linkedin.com/in/jordan-cora-5a4719413/",
+                "Linkedin",
+              )
+            }
             href="https://www.linkedin.com/in/jordan-cora-5a4719413/"
             target="_blank"
             rel="noopener noreferrer"
@@ -63,6 +95,13 @@ function Contact() {
           >
             <FaLinkedin
               className="text-white"
+              onClick={(e) =>
+                openInbound(
+                  e,
+                  "https://www.linkedin.com/in/jordan-cora-5a4719413/",
+                  "Linkedin",
+                )
+              }
               style={{
                 fontSize: resize_equation,
               }}

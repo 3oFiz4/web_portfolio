@@ -1,6 +1,21 @@
 // src/components/NavBar.jsx
 import React from "react";
 import NavItem from "./NavItem";
+import { track } from "@vercel/analytics";
+
+const openInbound = async (e, url, platform) => {
+  e.preventDefault(); // Stop immediate navigation
+
+  try {
+    // Tracks exactly which platform was clicked dynamically!
+    await track("Outbound Link Clicked", { platform: platform });
+  } catch (error) {
+    console.error("Analytics failed", error);
+  } finally {
+    // Opens the specific URL passed to the function
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+};
 
 const currentHash = window.location.hash;
 
@@ -18,6 +33,7 @@ function NavBar({ items }) {
             `}
           >
             <NavItem
+              onClick={(e) => openInbound(e, item.label, item.label)}
               label={item.label}
               href={item.label}
               isActive={currentHash}

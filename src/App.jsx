@@ -5,6 +5,7 @@ import Certif from "./components/section/certif/Certif";
 import Experience from "./components/section/experience/Experience";
 import Card from "./components/main_components/Card";
 import NavBar from "./components/main_components/NavBar";
+import { Analytics, track } from "@vercel/analytics/react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -78,17 +79,58 @@ function App() {
       });
   });
 
+  // EVENT DELEGATION
   useEffect(() => {
     const onHashChange = () => {
       const newHash = window.location.hash || "#home";
-      // Trigger transition only if it's a valid mapped component
       if (COMPONENT_MAP[newHash]) {
+        track("Page Viewed", { page: newHash });
         handleTransition(newHash);
       }
     };
 
+    // --- 2. Global Outbound & Download Click Tracker ---
+    const handleGlobalClick = (e) => {
+      // Find the closest anchor tag from what was actually clicked (handles SVGs/nested text)
+      const anchor = e.target.closest("a");
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      if (!href) return;
+
+      // Check if it's a download link or an external link
+      const isDownload =
+        anchor.hasAttribute("download") ||
+        href.match(/\.(pdf|zip|docx|png|jpg|mp4)$/i);
+      const isExternal =
+        href.startsWith("http://") ||
+        href.startsWith("https://") ||
+        href.startsWith("mailto:");
+
+      if (isDownload) {
+        track("File Downloaded", {
+          url: href,
+          fileName: anchor.getAttribute("download") || href.split("/").pop(),
+        });
+      } else if (isExternal) {
+        track("Outbound Link Clicked", {
+          url: href,
+          text:
+            anchor.innerText ||
+            anchor.getAttribute("aria-label") ||
+            "Unknown Link",
+        });
+      }
+    };
+
+    // Event Listeners
     window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    document.addEventListener("click", handleGlobalClick);
+
+    return () => {
+      window.removeEventListener("hashchange", onHashChange);
+      document.removeEventListener("click", handleGlobalClick);
+    };
   }, []);
 
   // Determine what to render based on State (default to Home if invalid)
@@ -118,6 +160,7 @@ function App() {
           </div>
         </div>
       </Card>
+      <Analytics />
       <div></div>
     </div>
   );
