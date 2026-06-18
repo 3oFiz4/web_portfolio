@@ -5,7 +5,7 @@ import Role from "./Role.jsx";
 import Intro from "./Intro.jsx";
 
 function Biography() {
-  const list = ["Developer", "Analyst", "Designer"];
+  const list = [<p>Developer</p>, "Analyst", "Designer"];
   return (
     <>
       <div className="bio-header w-full">

@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Home from "./components/section/home/Home";
 import Certif from "./components/section/certif/Certif";
+import Experience from "./components/section/experience/Experience";
 import Card from "./components/main_components/Card";
 import NavBar from "./components/main_components/NavBar";
 import { gsap } from "gsap";
@@ -10,12 +11,14 @@ import { useGSAP } from "@gsap/react";
 // map first
 const COMPONENT_MAP = {
   "#home": Home,
-  "#certificate": Certif, // in next commit, i think its a good idea to shorten it to "Certif."
+  "#certificate": Certif,
+  "#experience": Experience,
 };
 // then links
 const NAV_LINKS = [
   { label: "home", href: "#home" },
   { label: "certificate", href: "#certificate" },
+  { label: "experience", href: "#experience" },
 ];
 
 function App() {
