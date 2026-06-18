@@ -269,7 +269,7 @@ function CertifCard({
         )}
 
         <div className="flex-1 text-left jb-mono">
-          <div className="font-sm">{title}</div>
+          <div className="text-sm">{title}</div>
           <div className="text-sm text-zinc-500">{issuer}</div>
           <div className="text-xs text-zinc-600">Verified • {year}</div>
         </div>
