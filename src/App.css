@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "../src/components/section/certif/Certif.css";
-@import "../src/components/section/experience/experience.css";
+@import "../src/components/section/experience/Experience.css";
 html,
 body {
   width: 100%;
