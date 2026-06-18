@@ -1,8 +1,32 @@
 // src/components/Intro.jsx
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Observer } from "gsap/Observer";
+
+gsap.registerPlugin(Observer);
 
 function Intro() {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    // Use Observer for high-performance drag-to-scroll logic
+    const obs = Observer.create({
+      target: el,
+      type: "touch,pointer", // Listen for touch and mouse dragging
+      dragMinimum: 2, // Avoid accidental triggers on taps
+      onChangeY: (self) => {
+        // Increment scroll position based on drag delta (inverted for natural feel)
+        el.scrollTop -= self.deltaY;
+      },
+      // Allow standard behavior for links/buttons inside if any
+      preventDefault: false,
+    });
+
+    return () => obs.kill();
+  }, []);
   // text-white w-full jb-mono px-3 py-1
   // /* CHANGED: Fixed height constraint for mobile so it has a definitive scroll boundary, then resets on desktop */
   // h-52 max-h-52 md:h-full md:max-h-full
@@ -15,16 +39,20 @@ function Intro() {
   // md:text-[clamp(0.3rem,1.5cqw,0.7rem)]
   return (
     <div
+      ref={scrollRef}
       className="text-white w-full jb-mono
       overflow-y-auto max-h-full touch-pan-y
       scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent
-h-52 max-h-52 md:h-full md:max-h-full
+      h-52 max-h-52 md:h-full md:max-h-full
       max-md:text-[clamp(0.8rem,1vw,.8rem)] 
-        md:text-[clamp(0.3rem,1.5cqw,0.7rem)]
-        px-3 py-1 w-full h-full"
+      md:text-[clamp(0.3rem,1.5cqw,0.7rem)]
+      cursor-grab active:cursor-grabbing
+      px-3 py-1 w-full h-full"
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(255,255,255,0.1) transparent",
+        overscrollBehavior: "contain", // Prevents page bounce
+        WebkitOverflowScrolling: "touch",
       }}
     >
       <p>
