@@ -24,9 +24,8 @@ function Terminal({ className = "" }) {
         <br /> [x] Mobile-support (v0.2)
         <br /> [x] Anim. performance improvement (v0.2)
         <br /> [x] Certificate Section
-        <br /> [ ] Testimonial Section
-        <br /> [ ] Experience Section
-        <br /> [ ] ???
+        <br /> [x] Experience Section
+        <br /> [ ]? Testimonial Section
         <br />
       </pre>
     </div>
