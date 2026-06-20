@@ -19,7 +19,7 @@ const openInbound = async (e, url, platform) => {
 
 const currentHash = window.location.hash;
 
-function NavBar({ items }) {
+function NavBar({ items, isAnimating }) {
   return (
     <div className="outer nav-container">
       <div className="inner nav-container">
@@ -37,6 +37,7 @@ function NavBar({ items }) {
               label={item.label}
               href={item.label}
               isActive={currentHash}
+              isAnimating={isAnimating}
             />
           </div>
         ))}

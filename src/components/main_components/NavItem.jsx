@@ -31,7 +31,7 @@ const STRIPE_SVG = (
 
 const COPIES = 6;
 
-function NavItem({ label, href }) {
+function NavItem({ label, href, isAnimating }) {
   const overlayRef = useRef(null);
   const navItemRef = useRef(null);
   const stripeTrackRef = useRef(null);
@@ -149,6 +149,7 @@ function NavItem({ label, href }) {
   const handleMouseLeave = () => hoverTlRef.current?.reverse();
 
   const handleClick = () => {
+    if (isAnimating?.current) return;
     window.location.hash = `#${href}`;
   };
 

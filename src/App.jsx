@@ -142,7 +142,7 @@ function App() {
         <div className="main-grid w-full h-[100dvh] max-h-[100dvh] overflow-y-auto px-4 pb-12 box-border flex flex-col">
           {/* HEADER */}
           <div className="header flex-none">
-            <NavBar items={NAV_LINKS} />
+            <NavBar items={NAV_LINKS} isAnimating={isAnimating} />
           </div>
           {/* Added overflow-hidden to prevent the overlay sliding out of bounds */}
           <div className="page-grid relative flex-grow overflow-hidden">
